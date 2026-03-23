@@ -854,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: window.location.origin }
+        options: { redirectTo: window.location.origin + "/app.html" }
       });
       if (error) throw error;
       // Supabase gestisce da solo il redirect
