@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HEYPEOPLE · Router</title>
+  /manifest.json
+  /icon.png
+  <meta name="theme-color" content="#070707" />
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      background:#070707;
+      color:#DFFF00;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:sans-serif;
+      height:100vh;
+      text-align:center;
+    }
+    a{color:#DFFF00}
+  </style>
+</head>
+<body>
+  <div>
+    <div id="msg">Caricamento…</div>
+    <div style="margin-top:10px;">
+      /auth.htmlVai al login</a> · 
+      /app.htmlVai all’app</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from "/assets/js/supabase.js";
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        location.replace("/app.html");
+      } else {
+        location.replace("/auth.html");
+      }
+    } catch (e) {
+      document.getElementById("msg").textContent = "Errore di rete. Usa i link sotto.";
+    }
+  </script>
+</body>
+</html>
