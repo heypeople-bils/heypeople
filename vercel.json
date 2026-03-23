@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "public": true,
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "assets/css/*.css", "use": "@vercel/static" },
+    { "src": "assets/js/*.js", "use": "@vercel/static" },
+    { "src": "icon.png", "use": "@vercel/static" },
+    { "src": "manifest.json", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/auth", "dest": "/auth.html" },
+    { "src": "/app", "dest": "/app.html" }
+  ]
+}
