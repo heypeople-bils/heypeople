@@ -7,1014 +7,1279 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HeyPeople">
-<meta name="description" content="Un posto dove le persone sono ancora persone.">
 <title>HEYPEOPLE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" sizes="512x512" href="icon.png">
 <link rel="apple-touch-icon" sizes="192x192" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
-<meta name="apple-touch-fullscreen" content="yes">
-<!-- iubenda links only - no auto banner -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --black:#070707;--card:#111;--card2:#161616;
-  --border:#1e1e1e;--b2:#252525;
-  --soft:#666;--mid:#999;--white:#F2F2ED;
-  --neon:#DFFF00;--glow:rgba(223,255,0,0.35);
-  --blue:#4ECDC4;--bglow:rgba(78,205,196,0.3);
-  --dim:rgba(223,255,0,0.07);--dimm:rgba(223,255,0,0.15);
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-}
-html,body{height:100%;overflow:hidden;background:var(--black)}
-body{font-family:'DM Sans',sans-serif;color:var(--white);overscroll-behavior:none}
+      --black:#070707;
+      --neon:#DFFF00;
+      --green:#4A5D3A;
+      --grigio:#1a1a1a;
+      --card:rgba(16,16,16,0.92);
+      --border:rgba(223,255,0,0.18);
+      --soft:#666;
+      --white:#F2F2ED;
+      --glow:rgba(223,255,0,0.35);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;background:var(--black);overflow:hidden}
+    body{font-family:"DM Sans",sans-serif;color:var(--white)}
 
-/* ═══ APP SHELL ═══ */
-#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--black)}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--black);transition:opacity 0.3s,transform 0.3s;opacity:0;pointer-events:none;transform:translateY(8px)}
-.screen.active{opacity:1;pointer-events:all;transform:translateY(0)}
+    /* App shell */
+    #app{
+      position:fixed;inset:0;
+      width:100%;
+      max-width:430px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      background:var(--black);
+    }
+    .bg{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(223,255,0,0.07), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(74,93,58,0.10), transparent 55%);
+      pointer-events:none;
+    }
 
-/* ═══ SPLASH ═══ */
-#splash{background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:40px 32px}
-.splash-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(223,255,0,0.06),transparent 55%)}
-.splash-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(223,255,0,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(223,255,0,0.015) 1px,transparent 1px);background-size:56px 56px}
-.splash-dot{width:12px;height:12px;background:var(--neon);border-radius:50%;box-shadow:0 0 20px var(--glow);animation:splash-dot 1.4s ease-in-out forwards;opacity:0;position:relative;z-index:1}
-@keyframes splash-dot{0%{opacity:0;transform:scale(0.5)}40%{opacity:1;transform:scale(1.2)}70%{transform:scale(1)}100%{opacity:1;transform:scale(1)}}
-.splash-logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:5px;line-height:0.88;text-align:center;margin-top:16px;position:relative;z-index:1}
-.splash-logo .hey{color:var(--white);display:block;opacity:0;animation:fade-up 0.5s 0.8s forwards}
-.splash-logo .ppl{color:var(--neon);display:block;text-shadow:0 0 40px var(--glow);opacity:0;animation:fade-up 0.5s 1.1s forwards}
-@keyframes fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.splash-tag{font-family:'Instrument Serif',serif;font-style:italic;font-size:15px;color:var(--soft);text-align:center;margin-top:16px;line-height:1.5;opacity:0;animation:fade-up 0.5s 1.4s forwards;position:relative;z-index:1}
-.splash-rule{width:28px;height:1px;background:var(--b2);margin:20px auto;opacity:0;animation:fade-up 0.3s 1.6s forwards;position:relative;z-index:1}
-.splash-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fade-up 0.5s 1.7s forwards;position:relative;z-index:1}
-.splash-pill{font-size:9px;color:rgba(223,255,0,0.5);letter-spacing:1px;border:1px solid rgba(223,255,0,0.15);border-radius:20px;padding:4px 10px}
-.splash-btn{margin-top:28px;width:100%;max-width:320px;height:52px;background:var(--neon);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:var(--black);box-shadow:0 0 24px var(--glow);cursor:pointer;gap:8px;opacity:0;animation:fade-up 0.5s 2s forwards;position:relative;z-index:1;border:none;-webkit-appearance:none}
-.splash-btn-dot{width:6px;height:6px;background:var(--black);border-radius:50%;opacity:0.35}
-.splash-or{font-size:10px;color:var(--soft);margin-top:12px;opacity:0;animation:fade-up 0.3s 2.2s forwards;position:relative;z-index:1}
-.splash-google{margin-top:10px;width:100%;max-width:320px;height:44px;background:var(--card);border:1px solid var(--b2);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--soft);cursor:pointer;opacity:0;animation:fade-up 0.5s 2.3s forwards;position:relative;z-index:1}
-.splash-login{margin-top:12px;font-size:11px;color:var(--soft);opacity:0;animation:fade-up 0.3s 2.5s forwards;position:relative;z-index:1}
-.splash-login span{color:var(--mid);border-bottom:1px solid var(--b2);cursor:pointer}
+    .screen{
+      position:absolute;inset:0;
+      padding:18px 20px;
+      display:none;
+      flex-direction:column;
+      gap:12px;
+    }
+    .screen.active{display:flex;animation:screenIn 220ms ease-out}
+    @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ═══ ONBOARDING ═══ */
-#onboarding{padding:calc(var(--safe-top) + 20px) 20px calc(var(--safe-bottom) + 20px);justify-content:center}
-.onb-wrap{width:100%;max-width:360px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-.onb-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:3px;color:var(--white);text-align:center}
-.onb-sub{font-size:13px;color:var(--soft);text-align:center;line-height:1.5;margin-bottom:4px}
-.onb-input{height:48px;border-radius:12px;border:1px solid var(--b2);background:var(--card);color:var(--white);padding:0 14px;font-size:14px;outline:none}
-.onb-input::placeholder{color:var(--soft)}
-.onb-error{min-height:18px;font-size:12px;color:#ff8f8f;text-align:center}
+    /* Reusable */
+    .dot{
+      width:12px;height:12px;border-radius:50%;
+      background:var(--neon);
+      box-shadow:0 0 22px var(--glow);
+      animation:dotPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(0.75);opacity:0.65}}
 
-/* ═══ WELCOME ═══ */
-#welcome{padding:calc(var(--safe-top) + 20px) 0 0}
-.welcome-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px 20px;background:radial-gradient(circle at 50% 30%,rgba(223,255,0,0.08),transparent 55%)}
-.welcome-av{width:72px;height:72px;border-radius:50%;background:var(--card);border:2.5px solid var(--neon);box-shadow:0 0 20px var(--glow);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--white);margin-bottom:14px}
-.welcome-badge{font-size:9px;color:var(--neon);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
-.welcome-name{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--white);letter-spacing:3px}
-.welcome-text{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--soft);text-align:center;margin-top:10px;line-height:1.6}
-.welcome-text strong{color:var(--white);font-style:normal;font-family:'DM Sans';font-weight:500}
-.welcome-bottom{padding:16px 20px calc(var(--safe-bottom) + 20px)}
-.welcome-rules{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.wr{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:12px 14px}
-.wr-icon{width:26px;height:26px;border-radius:8px;background:var(--dim);border:1px solid var(--dimm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.wr-icon svg{width:13px;height:13px;stroke:var(--neon);fill:none;stroke-width:2}
-.wr-text{font-size:12px;color:var(--soft);line-height:1.4}
-.wr-text strong{color:var(--mid)}
+    .title{
+      font-family:"Bebas Neue",sans-serif;
+      font-size:56px;
+      letter-spacing:5px;
+      line-height:0.9;
+      text-align:center;
+    }
+    .title .p{color:var(--neon);text-shadow:0 0 28px var(--glow)}
 
-/* ═══ MAIN APP ═══ */
-#main{padding-top:calc(var(--safe-top) + 0px)}
-.topbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border);background:rgba(7,7,7,0.95);backdrop-filter:blur(20px);position:relative;z-index:10}
-.tb-logo{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:3px}
-.tb-logo .h{color:var(--white)}.tb-logo .p{color:var(--neon)}
-.tb-right{display:flex;align-items:center;gap:10px}
-.tb-notif{width:34px;height:34px;border:1px solid var(--b2);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
-.tb-notif svg{width:15px;height:15px;stroke:var(--soft);fill:none;stroke-width:1.5}
-.nb-dot{position:absolute;top:7px;right:7px;width:5px;height:5px;background:var(--neon);border-radius:50%;box-shadow:0 0 4px var(--glow)}
+    .btn{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(16,16,16,0.92);
+      color:var(--white);
+      padding:14px 14px;
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:1px;
+      cursor:pointer;
+    }
+    .btn-neon{
+      background:var(--neon);
+      color:var(--black);
+      border-color:rgba(0,0,0,0.2);
+      box-shadow:0 0 24px rgba(223,255,0,0.25);
+    }
+    .btn-ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.12);
+      color:#9a9a9a;
+    }
 
-.feed-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--safe-bottom) + 64px)}
-.feed-scroll::-webkit-scrollbar{display:none}
+    .label{font-size:11px;color:#999;font-weight:900;letter-spacing:0.5px;margin-left:2px}
+    .field{
+      width:100%;
+      height:48px;
+      border-radius:12px;
+      border:2px solid rgba(223,255,0,0.18);
+      background:rgba(26,26,26,0.96);
+      color:var(--white);
+      padding:0 14px;
+      font-size:16px; /* evita zoom */
+      outline:none;
+      font-family:"DM Sans",sans-serif;
+    }
+    .subtle{font-size:10px;color:var(--soft);margin-top:-4px;line-height:1.4}
 
-/* DQ Card */
-.dq-card{margin:12px 14px;background:var(--dim);border:1px solid var(--dimm);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
-.dq-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:var(--dim);border-radius:50%;filter:blur(16px)}
-.dq-label{display:flex;align-items:center;gap:5px;margin-bottom:6px}
-.dq-dot{width:5px;height:5px;background:var(--neon);border-radius:50%;box-shadow:0 0 4px var(--glow);animation:dp 2s infinite;flex-shrink:0}
-@keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
-.dq-tag{font-size:8px;color:var(--neon);letter-spacing:2px;text-transform:uppercase;font-weight:600}
-.dq-text{font-family:'Instrument Serif',serif;font-style:italic;font-size:15px;color:var(--white);line-height:1.4}
-.dq-bar{display:flex;align-items:center;gap:6px;margin-top:10px}
-.dq-track{flex:1;height:2px;background:var(--b2);border-radius:2px;overflow:hidden}
-.dq-fill{height:100%;background:var(--neon);border-radius:2px;box-shadow:0 0 4px var(--glow)}
-.dq-time{font-size:9px;color:var(--neon);font-weight:600}
+    /* Desktop gate */
+    #desktop-gate{
+      position:fixed;inset:0;
+      background:var(--black);
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:40px;
+      text-align:center;
+      z-index:9999;
+    }
+    #desktop-gate.show{display:flex}
+    .gate-card{
+      width:min(520px, 100%);
+      border:1px solid rgba(223,255,0,0.14);
+      border-radius:16px;
+      background:rgba(16,16,16,0.55);
+      padding:18px 16px;
+      backdrop-filter:blur(16px);
+    }
+    .gate-title{
+      font-family:"Bebas Neue",sans-serif;
+      font-size:46px;
+      letter-spacing:5px;
+      margin-top:8px;
+    }
+    .gate-title .p{color:var(--neon);text-shadow:0 0 28px var(--glow)}
+    .gate-text{font-size:13px;color:#888;line-height:1.6;margin-top:10px;font-weight:700}
+    .qr-hint{font-size:11px;color:#777;margin-top:10px;line-height:1.5}
 
-/* Locked overlay */
-.locked-wrap{margin:0 14px;position:relative}
-.locked-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,7,7,0) 0%,rgba(7,7,7,0.97) 55%);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:16px;z-index:5}
-.lock-icon-wrap{width:38px;height:38px;background:var(--dim);border:1px solid var(--dimm);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.lock-icon-wrap svg{width:16px;height:16px;stroke:var(--neon);fill:none;stroke-width:1.5}
-.lock-text{font-size:12px;color:var(--soft);text-align:center;line-height:1.4}
-.lock-text span{color:var(--neon)}
-.post-blur{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:8px;filter:blur(3px);opacity:.3}
-.pb-head{display:flex;gap:8px;margin-bottom:8px}
-.pb-av{width:32px;height:32px;border-radius:50%;background:var(--b2);flex-shrink:0}
-.pb-lines{flex:1;display:flex;flex-direction:column;gap:5px;padding-top:4px}
-.pb-line{height:7px;background:var(--b2);border-radius:3px}
-.pb-text{height:8px;background:var(--b2);border-radius:3px;margin-bottom:4px}
+    /* Home */
+    .home-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:6px}
+    .home-head h2{font-size:34px;font-weight:900;letter-spacing:0.5px;text-align:center}
+    .home-head h2 .neon{color:var(--neon);text-shadow:0 0 22px var(--glow)}
+    .home-sub{font-size:11px;color:#666;font-weight:900;letter-spacing:0.5px;text-align:center}
 
-/* Reply CTA */
-.reply-cta{margin:12px 14px}
-.btn-neon{width:100%;height:50px;background:var(--neon);border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;color:var(--black);box-shadow:0 0 20px var(--glow);cursor:pointer;gap:7px;border:none;-webkit-appearance:none}
-.btn-dot{width:5px;height:5px;background:var(--black);border-radius:50%;opacity:.35}
+    .stat-grid{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px}
+    .stat{
+      background:rgba(26,26,26,0.96);
+      border:2px solid rgba(223,255,0,0.18);
+      border-radius:10px;
+      padding:16px 10px;
+      display:flex;flex-direction:column;align-items:center;gap:10px;
+      min-height:98px;
+    }
+    .stat svg{width:26px;height:26px}
+    .stat .v{font-size:20px;font-weight:900;color:var(--neon);text-shadow:0 0 22px var(--glow)}
+    .stat .t{font-size:10px;color:#666;font-weight:900;letter-spacing:0.6px}
 
-/* Post */
-.post{margin:0 14px 10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px}
-.post-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.av{width:32px;height:32px;border-radius:50%;background:var(--card2);border:1.5px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--soft);flex-shrink:0}
-.av.neon{border-color:var(--neon);color:var(--neon);background:var(--dim);box-shadow:0 0 6px var(--glow)}
-.av.me{border:2px solid var(--neon);box-shadow:0 0 12px var(--glow);color:var(--white)}
-.pm{flex:1}
-.pname{font-size:12px;color:var(--white);font-weight:600}
-.ptime{font-size:8px;color:#2e2e2e;margin-top:1px}
-.pbadge{display:flex;align-items:center;gap:3px;font-size:6px;color:var(--neon);background:var(--dim);border:1px solid var(--dimm);border-radius:4px;padding:2px 6px;font-weight:600}
-.pbadge-dot{width:3px;height:3px;background:var(--neon);border-radius:50%}
-.post-body{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--white);line-height:1.5;margin-bottom:10px}
+    .home-actions{margin-top:10px;display:flex;flex-direction:column;gap:10px;width:100%}
+    .action{
+      background:rgba(26,26,26,0.96);
+      border:2px solid rgba(223,255,0,0.18);
+      border-radius:10px;
+      padding:14px 12px;
+      text-align:center;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:0.8px;
+      cursor:pointer;
+    }
+    .action.secondary{border-color:rgba(74,93,58,0.45)}
+    .action.ghost{border-color:rgba(255,255,255,0.12);color:#777;background:rgba(20,20,20,0.65)}
 
-/* Post image/drawing */
-.post-media{border-radius:10px;overflow:hidden;margin-bottom:10px;position:relative;aspect-ratio:1/1;background:#040404}
-.post-media img{width:100%;height:100%;object-fit:cover}
-.post-wm{position:absolute;bottom:7px;right:7px;display:inline-flex;align-items:center;background:rgba(7,7,7,0.88);border-radius:5px;padding:3px 8px 3px 6px;gap:4px}
-.wm-dot{width:4px;height:4px;background:var(--neon);border-radius:50%;flex-shrink:0}
-.wm-text{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:1.5px;line-height:1}
-.wm-text .h{color:var(--white)}.wm-text .p{color:var(--neon)}
+    /* Game */
+    .game-head{display:flex;align-items:flex-start;justify-content:space-between;margin-top:4px}
+    .game-head p{font-size:11px;color:#666;font-weight:900;letter-spacing:0.4px}
+    .game-head h3{font-size:28px;color:var(--neon);letter-spacing:1px;margin-top:2px}
+    .timer{font-size:26px;color:var(--neon);font-weight:900;margin-top:4px}
 
-/* Post music */
-.post-music{background:var(--dim);border:1px solid var(--dimm);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.music-play{width:34px;height:34px;background:var(--neon);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px var(--glow)}
-.music-play svg{width:12px;height:12px;fill:var(--black)}
-.music-info{flex:1}
-.music-title{font-size:12px;color:var(--white);font-weight:600}
-.music-sub{font-size:9px;color:var(--soft);margin-top:1px}
-.music-waves{display:flex;gap:2px;align-items:center}
-.wave{width:2px;border-radius:1px;background:var(--neon)}
+    #board-wrap{width:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+    #board{
+      width:100%;
+      max-width:340px;
+      aspect-ratio:7/6;
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      grid-template-rows:repeat(6,1fr);
+      gap:8px;
+      padding:12px;
+      border-radius:12px;
+      border:2px solid rgba(223,255,0,0.35);
+      background:rgba(10,10,10,0.6);
+    }
+    .cell{
+      border-radius:999px;
+      background:rgba(26,26,26,0.65);
+      border:1px solid rgba(255,255,255,0.03);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+    }
+    .cell:active{transform:scale(0.98)}
+    .piece{width:72%;height:72%;border-radius:999px;border:2px solid rgba(255,255,255,0.06);background:transparent}
+    .cell.human .piece{background:var(--neon);border-color:rgba(223,255,0,0.5);box-shadow:0 0 18px rgba(223,255,0,0.18)}
+    .cell.ai .piece{background:rgba(74,93,58,0.95);border-color:rgba(74,93,58,0.9);box-shadow:0 0 14px rgba(74,93,58,0.18)}
+    .cell.win{box-shadow:0 0 0 2px rgba(223,255,0,0.35), 0 0 22px rgba(223,255,0,0.12);border-color:rgba(223,255,0,0.35)}
+    .cell.ai.win{box-shadow:0 0 0 2px rgba(74,93,58,0.45), 0 0 22px rgba(74,93,58,0.18);border-color:rgba(74,93,58,0.55)}
 
-/* Reactions */
-.react-bar{display:flex;align-items:center;gap:5px;padding-top:9px;border-top:1px solid var(--border)}
-.rb{display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:8px;border:1px solid var(--b2);cursor:pointer;transition:all 0.15s}
-.rb svg{width:13px;height:13px;fill:none;stroke:#444;stroke-width:1.5}
-.rb span{font-family:'Bebas Neue',sans-serif;font-size:12px;color:#444}
-.rb.smile-on{border-color:var(--neon);background:var(--dim)}.rb.smile-on svg{stroke:var(--neon)}.rb.smile-on span{color:var(--neon)}
-.rb.sad-on{border-color:var(--blue);background:rgba(78,205,196,0.07)}.rb.sad-on svg{stroke:var(--blue)}.rb.sad-on span{color:var(--blue)}
-.write-rb{display:flex;align-items:center;gap:4px;padding:5px 7px;border-radius:8px;border:1px solid var(--b2);cursor:pointer;margin-left:auto}
-.write-rb svg{width:12px;height:12px;fill:none;stroke:#444;stroke-width:1.5}
-.write-rb span{font-size:9px;color:#444}
+    .mode-row{width:100%;display:flex;gap:12px;justify-content:space-between}
+    .mode{
+      flex:1;
+      background:rgba(26,26,26,0.96);
+      border:2px solid rgba(223,255,0,0.18);
+      border-radius:10px;
+      padding:12px 10px;
+      text-align:center;
+    }
+    .mode.ai{border-color:rgba(74,93,58,0.5)}
+    .mode .mini{width:28px;height:28px;border-radius:50%;margin:8px auto 6px;background:var(--neon)}
+    .mode.ai .mini{background:rgba(74,93,58,0.95)}
+    .mode .who{font-weight:900;font-size:11px;letter-spacing:0.6px}
+    .mode .tag{font-size:10px;color:#666;font-weight:900;letter-spacing:0.4px;margin-top:2px}
 
-/* ═══ REPLY SCREEN ═══ */
-#reply{padding-top:calc(var(--safe-top) + 0px)}
-.reply-header{height:52px;display:flex;align-items:center;gap:12px;padding:0 18px;border-bottom:1px solid var(--border)}
-.back-btn{width:32px;height:32px;border:1px solid var(--b2);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.back-btn svg{width:13px;height:13px;stroke:var(--white);fill:none;stroke-width:1.5}
-.reply-title{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--white);letter-spacing:2px}
-.reply-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--safe-bottom) + 20px)}
-.reply-scroll::-webkit-scrollbar{display:none}
-.reply-dq{margin:12px 16px;background:var(--dim);border:1px solid var(--dimm);border-radius:13px;padding:13px 15px}
-.fmt-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:0 16px 12px}
-.fmt-btn{background:var(--card);border:1px solid var(--b2);border-radius:11px;padding:10px 12px;display:flex;align-items:center;gap:7px;cursor:pointer;transition:all 0.15s}
-.fmt-btn.on{background:var(--dim);border-color:var(--neon)}
-.fmt-btn svg{width:14px;height:14px;fill:none;stroke-width:1.5;flex-shrink:0}
-.fmt-btn:not(.on) svg{stroke:var(--soft)}
-.fmt-btn.on svg{stroke:var(--neon)}
-.fmt-label{font-size:10px;letter-spacing:0.5px}
-.fmt-btn:not(.on) .fmt-label{color:var(--soft)}
-.fmt-btn.on .fmt-label{color:var(--neon)}
+    /* Result */
+    .result-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding-bottom:40px}
+    .result-title{font-family:"Bebas Neue",sans-serif;font-size:44px;letter-spacing:2px;line-height:1;margin-top:4px}
+    .panel{
+      width:100%;
+      max-width:340px;
+      background:rgba(26,26,26,0.96);
+      border:2px solid rgba(223,255,0,0.2);
+      border-radius:12px;
+      padding:14px 14px;
+      text-align:center;
+      display:none;
+      flex-direction:column;
+      gap:8px;
+      align-items:center;
+    }
+    .panel.show{display:flex}
+    .panel.ai{border-color:rgba(74,93,58,0.5)}
+    .panel p{font-size:12px;color:#888;line-height:1.5}
+    .two-btn{display:flex;gap:10px;width:100%;margin-top:12px}
+    .two-btn .btn{flex:1}
+    .quote{font-size:10px;color:#bdbdbd;font-style:italic}
 
-/* Testo format */
-.textarea-wrap{margin:0 16px 8px}
-.reply-textarea{width:100%;background:var(--card);border:1px solid var(--b2);border-radius:12px;padding:12px 14px;font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--white);resize:none;height:100px;outline:none;-webkit-appearance:none}
-.reply-textarea::placeholder{color:var(--soft)}
-.char-count{padding:2px 16px 8px;font-size:9px;color:var(--soft);display:flex;align-items:center;gap:4px}
-.char-dot{width:4px;height:4px;background:var(--neon);border-radius:50%;flex-shrink:0}
+    /* Cookie banner (custom nero + neon) */
+    #cookie-banner{
+      position:fixed;
+      left:50%;
+      bottom:0;
+      transform:translate(-50%, 120%);
+      width:min(430px, calc(100vw - 16px));
+      z-index:1000;
+      background:rgba(17,17,17,0.98);
+      border:1px solid rgba(223,255,0,0.15);
+      border-radius:14px 14px 0 0;
+      box-shadow:0 -10px 30px rgba(0,0,0,0.45);
+      padding:12px 12px calc(env(safe-area-inset-bottom) + 12px);
+      transition:transform 0.35s ease;
+      display:none;
+    }
+    #cookie-banner.show{
+      transform:translate(-50%, 0);
+      display:block;
+    }
+    #cookie-banner .inner{width:100%}
+    #cookie-banner .top{
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      margin-bottom:8px;
+    }
+    #cookie-banner .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--neon);
+      box-shadow:0 0 12px var(--glow);
+      margin-top:5px;
+      flex-shrink:0;
+    }
+    #cookie-banner .btns{display:flex;gap:8px}
+    #cookie-banner button{
+      flex:1;
+      height:34px;
+      border-radius:9px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(26,26,26,0.95);
+      color:#fff;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:0.5px;
+      cursor:pointer;
+    }
+    #cookie-banner button.accept{
+      background:var(--neon);
+      color:var(--black);
+      border-color:rgba(0,0,0,0.2);
+    }
 
-/* Foto format */
-.camera-wrap{margin:0 16px 12px}
-.camera-vf{width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#0a0a1a,#0a1020);position:relative;display:flex;align-items:center;justify-content:center}
-.vf-corners div{position:absolute;width:18px;height:18px}
-.vf-tl{top:10px;left:10px;border-top:2px solid var(--neon);border-left:2px solid var(--neon);border-radius:2px 0 0 0}
-.vf-tr{top:10px;right:10px;border-top:2px solid var(--neon);border-right:2px solid var(--neon);border-radius:0 2px 0 0}
-.vf-bl{bottom:10px;left:10px;border-bottom:2px solid var(--neon);border-left:2px solid var(--neon);border-radius:0 0 0 2px}
-.vf-br{bottom:10px;right:10px;border-bottom:2px solid var(--neon);border-right:2px solid var(--neon);border-radius:0 0 2px 0}
-.vf-center{width:10px;height:10px;border:1.5px solid var(--neon);border-radius:50%}
-.vf-label{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;white-space:nowrap}
-.shutter-wrap{display:flex;align-items:center;justify-content:center;padding:12px 0}
-.shutter{width:56px;height:56px;border-radius:50%;background:transparent;border:3px solid var(--neon);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 16px var(--glow)}
-.shutter-inner{width:44px;height:44px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px var(--glow)}
+    /* Scroll screens */
+    .scroll{overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:110px}
 
-/* Disegno format */
-.canvas-wrap{margin:0 16px 8px;position:relative}
-#drawing-canvas{width:100%;aspect-ratio:1/1;border-radius:12px;background:#040404;cursor:crosshair;touch-action:none;display:block}
-.canvas-wm{position:absolute;bottom:8px;right:8px}
-.canvas-toolbar{margin:0 16px 12px;display:flex;align-items:center;gap:8px}
-.tool-btn{width:32px;height:32px;border:1px solid var(--b2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--card)}
-.tool-btn.on{background:var(--dim);border-color:var(--neon)}
-.tool-btn svg{width:14px;height:14px;fill:none;stroke-width:1.5}
-.tool-btn:not(.on) svg{stroke:var(--soft)}
-.tool-btn.on svg{stroke:var(--neon)}
-.brush-sizes{display:flex;gap:4px;background:var(--card);border:1px solid var(--b2);border-radius:8px;padding:7px 10px;align-items:center}
-.bs{border-radius:50%;background:var(--neon);cursor:pointer}
-.bs.on{box-shadow:0 0 5px var(--glow)}
-.font-select{display:flex;gap:3px;background:var(--card);border:1px solid var(--b2);border-radius:8px;padding:4px;overflow:hidden}
-.fs-btn{padding:4px 8px;border-radius:5px;font-size:10px;color:var(--soft);cursor:pointer}
-.fs-btn.on{background:var(--dim);color:var(--neon)}
+    /* Info */
+    #info h4{font-size:14px;letter-spacing:0.2px}
 
-/* Musica format */
-.music-input-wrap{margin:0 16px 12px}
-.music-link-field{width:100%;background:var(--card);border:1px solid var(--b2);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.music-link-field svg{width:14px;height:14px;stroke:var(--soft);fill:none;stroke-width:1.5;flex-shrink:0}
-.music-link-field input{flex:1;background:transparent;border:none;outline:none;font-size:13px;color:var(--white);font-family:'DM Sans',sans-serif}
-.music-link-field input::placeholder{color:var(--soft)}
-.music-preview{background:var(--dim);border:1px solid var(--dimm);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px;display:none}
-.music-why{width:100%;background:var(--card);border:1px solid var(--b2);border-radius:12px;padding:12px 14px;font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--white);resize:none;height:80px;outline:none;-webkit-appearance:none}
-.music-why::placeholder{color:var(--soft)}
-
-/* Publish btn */
-.publish-wrap{padding:0 16px 16px}
-
-/* ═══ BOTTOM NAV ═══ */
-.bnav{position:absolute;bottom:0;left:0;right:0;height:calc(56px + var(--safe-bottom));background:rgba(7,7,7,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-around;padding:8px 8px 0;z-index:20}
-.bn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:7px;color:#2a2a2a;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:4px 8px;min-width:44px}
-.bn svg{width:20px;height:20px;stroke-width:1.5;fill:none;stroke:#2a2a2a}
-.bn.on{color:var(--neon)}.bn.on svg{stroke:var(--neon)}
-.bn-plus-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;margin-top:-14px}
-.bn-plus{width:44px;height:44px;background:var(--neon);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px var(--glow)}
-.bn-plus svg{width:20px;height:20px;stroke:var(--black);stroke-width:2.5;fill:none}
-
-/* ═══ COOKIE BANNER ═══ */
-#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--card);border-top:1px solid var(--border);padding:16px 20px calc(var(--safe-bottom) + 16px);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)}
-#cookie-banner.show{transform:translateY(0)}
-.cb-inner{max-width:480px;margin:0 auto}
-.cb-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
-.cb-icon{width:32px;height:32px;border-radius:50%;background:var(--dim);border:1px solid var(--dimm);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.cb-dot{width:8px;height:8px;background:var(--neon);border-radius:50%;box-shadow:0 0 6px var(--glow);animation:dp 2s infinite}
-.cb-text{font-size:12px;color:var(--soft);line-height:1.6}
-.cb-text strong{color:var(--white)}
-.cb-text a{color:var(--neon);text-decoration:none}
-.cb-btns{display:flex;gap:8px}
-.cb-accept{flex:1;height:42px;background:var(--neon);border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--black);border:none;cursor:pointer;box-shadow:0 0 12px var(--glow)}
-.cb-reject{flex:1;height:42px;background:transparent;border:1px solid var(--b2);border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--soft);cursor:pointer}
-
-/* ═══ UTILS ═══ */
-.hidden{display:none!important}
-.divider{width:100%;height:1px;background:var(--border)}
-
-/* ═══ DESKTOP SCREEN ═══ */
-#desktop-screen{position:fixed;inset:0;background:var(--black);display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;z-index:9999}
-#desktop-screen.show{display:flex}
-.ds-logo{font-family:'Bebas Neue',sans-serif;font-size:80px;letter-spacing:6px;line-height:.85;margin-bottom:24px}
-.ds-logo .h{color:var(--white);display:block}
-.ds-logo .p{color:var(--neon);display:block;text-shadow:0 0 40px var(--glow)}
-.ds-text{font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:var(--soft);max-width:420px;line-height:1.6;margin-bottom:32px}
-.ds-text strong{color:var(--white);font-style:normal;font-family:'DM Sans';font-weight:500}
-.ds-url{background:var(--dim);border:1px solid var(--dimm);border-radius:14px;padding:16px 28px;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--neon);letter-spacing:3px;margin-bottom:16px}
-.ds-sub{font-size:12px;color:var(--soft);letter-spacing:1px}
+    @supports(padding: max(0px)){
+      #app{padding-bottom: env(safe-area-inset-bottom)}
+    }
 </style>
 </head>
+
 <body>
-
 <div id="app">
+    <div class="bg"></div>
 
-  <!-- ══ SPLASH ══ -->
-  <div class="screen active" id="splash">
-    <div class="splash-bg"></div>
-    <div class="splash-grid"></div>
-    <div class="splash-dot"></div>
-    <div class="splash-logo">
-      <span class="hey">HEY</span>
-      <span class="ppl">PEOPLE</span>
+    <!-- SPLASH -->
+    <section class="screen active" id="splash">
+      <div class="dot" style="align-self:center;margin-top:8px"></div>
+      <div class="title" style="margin-top:16px">
+        <span style="color:var(--white)">HEY</span><span class="p">PEOPLE</span>
     </div>
-    <div class="splash-tag">Un posto dove le persone<br>sono ancora persone.</div>
-    <div class="splash-rule"></div>
-    <div class="splash-pills">
-      <div class="splash-pill">No AI</div>
-      <div class="splash-pill">No Filtri</div>
-      <div class="splash-pill">Solo Umani</div>
+      <div style="text-align:center;font-size:13px;color:#666;font-weight:700;line-height:1.6;margin-top:10px">
+        Sfida l'intelligenza artificiale.<br/>Scopri se sei ancora umano.
     </div>
-    <button class="splash-btn" onclick="startOnboarding()">
-      <div class="splash-btn-dot"></div>
-      ENTRA IN HEYPEOPLE
-    </button>
+      <button class="btn btn-neon" id="btn-enter" style="max-width:310px;align-self:center;margin-top:16px">ENTRA IN HEYPEOPLE</button>
+      <div style="text-align:center;font-size:10px;color:#666;margin-top:auto;padding-top:14px">
+        <a href="https://www.iubenda.com/privacy-policy/99137709" target="_blank" style="color:var(--neon);text-decoration:underline;font-weight:900">Privacy</a>
+    </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section class="screen" id="login">
+      <div class="scroll">
+        <div style="display:flex;flex-direction:column;gap:16px;align-items:center;padding-top:8px">
+          <div style="text-align:center;margin-top:4px">
+            <div style="font-size:32px;font-weight:900;letter-spacing:1px">ACCEDI</div>
+            <div style="font-size:11px;color:#666;font-weight:800;margin-top:8px;line-height:1.4;max-width:340px">
+              Registrazione verificata via email (magic link).
+  </div>
   </div>
 
-  <!-- ══ ONBOARDING ══ -->
-  <div class="screen" id="onboarding" style="display:flex;flex-direction:column">
-    <div class="onb-wrap">
-      <div class="onb-title">ENTRA IN HEYPEOPLE</div>
-      <div class="onb-sub">Inserisci i tuoi dati reali. Ti inviamo un link di accesso via email.</div>
-      <input class="onb-input" id="first-name" type="text" autocomplete="given-name" placeholder="Nome">
-      <input class="onb-input" id="last-name" type="text" autocomplete="family-name" placeholder="Cognome">
-      <input class="onb-input" id="auth-email" type="email" autocomplete="email" placeholder="Email (no tempmail)">
-      <button class="btn-neon" onclick="submitOnboarding()">
-        <div class="btn-dot"></div>
-        CONTINUA
-      </button>
-      <div class="onb-error" id="onboarding-error"></div>
+          <div style="width:100%;max-width:340px">
+            <div class="label">NICKNAME</div>
+            <input class="field" id="login-nickname" type="text" placeholder="Scegli il tuo nickname">
+            <div class="subtle">Lo useremo in home e nella classifica.</div>
     </div>
+
+          <div style="width:100%;max-width:340px">
+            <div class="label">EMAIL</div>
+            <input class="field" id="login-email" type="email" placeholder="tua@email.com" inputmode="email" autocomplete="email">
+            <div class="subtle">Non usiamo email temporanee. Tu sei una persona reale.</div>
   </div>
 
-  <!-- ══ WELCOME ══ -->
-  <div class="screen" id="welcome" style="display:flex;flex-direction:column">
-    <div class="welcome-top">
-      <div class="welcome-av" id="welcome-av">MR</div>
-      <div class="welcome-badge">Benvenuto su HEYPEOPLE</div>
-      <div class="welcome-name" id="welcome-name">MARCO R.</div>
-      <div class="welcome-text">Prima di iniziare, una cosa sola: <strong>qui si è persone vere.</strong></div>
-    </div>
-    <div class="welcome-bottom">
-      <div class="welcome-rules">
-        <div class="wr">
-          <div class="wr-icon"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
-          <div class="wr-text"><strong>Nome reale obbligatorio</strong> — niente nickname o maschere</div>
-        </div>
-        <div class="wr">
-          <div class="wr-icon"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
-          <div class="wr-text"><strong>Prima rispondi, poi leggi</strong> — dai prima di ricevere</div>
-        </div>
-        <div class="wr">
-          <div class="wr-icon"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
-          <div class="wr-text"><strong>Zero AI</strong> — ogni parola deve venire da te</div>
+          <button class="btn btn-neon" id="btn-login" style="max-width:340px">ACCEDI</button>
         </div>
       </div>
-      <button class="btn-neon" onclick="showMain()">
-        <div class="btn-dot"></div>
-        SONO PRONTO
-      </button>
-    </div>
-  </div>
+    </section>
 
-  <!-- ══ MAIN FEED ══ -->
-  <div class="screen" id="main" style="display:flex;flex-direction:column">
-    <div class="topbar">
-      <div class="tb-logo"><span class="h">HEY</span><span class="p">PEOPLE</span></div>
-      <div class="tb-right">
-        <div class="tb-notif">
-          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <div class="nb-dot" id="notif-dot"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="feed-scroll" id="feed-scroll">
-      <!-- DQ -->
-      <div class="dq-card">
-        <div class="dq-label"><div class="dq-dot"></div><div class="dq-tag" id="dq-label-text">Domanda del giorno</div></div>
-        <div class="dq-text" id="dq-text">"Qual è l'ultima cosa che ti ha fatto sorridere davvero?"</div>
-        <div class="dq-bar">
-          <div class="dq-track"><div class="dq-fill" id="dq-fill" style="width:65%"></div></div>
-          <div class="dq-time" id="dq-time">1h 23m</div>
-        </div>
+    <!-- HOME -->
+    <section class="screen" id="home">
+      <div class="home-head">
+        <h2>HEY! <span class="neon" id="home-nickname">YOU</span></h2>
+        <div class="home-sub">SFIDA HEYBOT • SCALA I LIVELLI • DOMINA THEWALL</div>
       </div>
 
-      <!-- LOCKED FEED -->
-      <div id="locked-section">
-        <div class="locked-wrap">
-          <div class="post-blur">
-            <div class="pb-head"><div class="pb-av"></div><div class="pb-lines"><div class="pb-line" style="width:55%"></div><div class="pb-line" style="width:38%"></div></div></div>
-            <div class="pb-text" style="width:90%"></div><div class="pb-text" style="width:75%"></div>
+      <div class="stat-grid">
+        <div class="stat">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 2C24 2 14 18 14 26C14 33.7 18.5 40 24 40C29.5 40 34 33.7 34 26C34 18 24 2 24 2Z" fill="#DFFF00" opacity="0.18"/>
+            <path d="M20 26C20 30.4 21.8 34 24 34C26.2 34 28 30.4 28 26" stroke="#DFFF00" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="v" id="home-streak">0</div>
+          <div class="t">STREAK</div>
           </div>
-          <div class="post-blur" style="opacity:.18">
-            <div class="pb-head"><div class="pb-av"></div><div class="pb-lines"><div class="pb-line" style="width:48%"></div><div class="pb-line" style="width:32%"></div></div></div>
-            <div class="pb-text" style="width:85%"></div><div class="pb-text" style="width:62%"></div>
+        <div class="stat">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 41L4 25C2 23 0 19 0 15C0 8 5 3 11 3C14 3 17 4 19 6L24 11L29 6C31 4 34 3 37 3C43 3 48 8 48 15C48 19 46 23 44 25L24 41Z" fill="#DFFF00" opacity="0.18"/>
+            <path d="M24 41L4 25C2 23 0 19 0 15C0 8 5 3 11 3C14 3 17 4 19 6L24 11L29 6C31 4 34 3 37 3C43 3 48 8 48 15C48 19 46 23 44 25L24 41Z" stroke="#DFFF00" stroke-width="2"/>
+          </svg>
+          <div class="v" id="home-vite">5</div>
+          <div class="t">VITE</div>
           </div>
-          <div class="locked-overlay">
-            <div class="lock-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-            <div class="lock-text">Rispondi alla domanda<br>per <span>sbloccare il feed</span></div>
+        <div class="stat">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 2L30.5 18H48L35.25 27L41.75 43L24 34L6.25 43L12.75 27L0 18H17.5L24 2Z" fill="#DFFF00" opacity="0.18"/>
+            <path d="M24 2L30.5 18H48L35.25 27L41.75 43L24 34L6.25 43L12.75 27L0 18H17.5L24 2Z" stroke="#DFFF00" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <div class="v" id="home-challenge">#1</div>
+          <div class="t">CHALLENGE</div>
           </div>
-        </div>
-        <div class="reply-cta"><button class="btn-neon" onclick="showReply()"><div class="btn-dot"></div>RISPONDI ORA</button></div>
       </div>
 
-      <!-- UNLOCKED FEED -->
-      <div id="unlocked-section" class="hidden">
-        <!-- Post 1 -->
-        <div class="post">
-          <div class="post-head">
-            <div class="av neon">LM</div>
-            <div class="pm"><div class="pname">Laura M.</div><div class="ptime">Milano · 12 min fa</div></div>
-            <div class="pbadge"><div class="pbadge-dot"></div>HUMAN</div>
+      <button class="btn btn-neon" id="btn-play" style="margin-top:10px">SFIDA HEYBOT</button>
+
+      <div class="home-actions">
+        <div class="action" id="btn-ranking">THEWALL</div>
+        <div class="action secondary" id="btn-info">INFO</div>
+        <div class="action ghost" id="btn-logout">ESCI</div>
           </div>
-          <div class="post-body">"Mia nonna che mi ha mandato una foto di quando avevo 4 anni. Senza motivo, così."</div>
-          <div class="react-bar">
-            <div class="rb" onclick="toggleReact(this,'smile')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M8.5 14.5 Q12 18 15.5 14.5" stroke-linecap="round"/></svg><span>34</span></div>
-            <div class="rb" onclick="toggleReact(this,'sad')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 15 Q12 12 15 15" stroke-linecap="round"/></svg><span>2</span></div>
-            <div class="write-rb"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Scrivi</span></div>
+    </section>
+
+    <!-- GAME -->
+    <section class="screen" id="game">
+      <div class="game-head">
+        <div class="left">
+          <p>CHALLENGE</p>
+          <h3 id="game-challenge">#1</h3>
+          </div>
+        <div class="right" style="text-align:right">
+          <p>TIMER</p>
+          <div class="timer" id="game-timer">00:30</div>
           </div>
         </div>
 
-        <!-- Post 2 -->
-        <div class="post">
-          <div class="post-head">
-            <div class="av">DL</div>
-            <div class="pm"><div class="pname">Diego L.</div><div class="ptime">Napoli · 38 min fa</div></div>
-            <div class="pbadge"><div class="pbadge-dot"></div>HUMAN</div>
+      <div id="board-wrap">
+        <div id="board" aria-label="Connect Four Board"></div>
+
+        <div class="mode-row">
+          <div class="mode" id="mode-human">
+            <div class="tag">TU</div>
+            <div class="mini"></div>
+            <div class="who">HUMAN</div>
           </div>
-          <div class="post-body">"Oggi non riuscivo ad alzarmi dal letto. Era solo una di quelle mattine."</div>
-          <div class="react-bar">
-            <div class="rb" onclick="toggleReact(this,'smile')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M8.5 14.5 Q12 18 15.5 14.5" stroke-linecap="round"/></svg><span>3</span></div>
-            <div class="rb" onclick="toggleReact(this,'sad')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 15 Q12 12 15 15" stroke-linecap="round"/></svg><span>41</span></div>
-            <div class="write-rb"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Scrivi</span></div>
+          <div class="mode ai" id="mode-ai">
+            <div class="tag">HEYBOT</div>
+            <div class="mini"></div>
+            <div class="who">AI</div>
+          </div>
           </div>
         </div>
+    </section>
 
-        <!-- Post 3 disegno -->
-        <div class="post">
-          <div class="post-head">
-            <div class="av neon">SR</div>
-            <div class="pm"><div class="pname">Sofia R.</div><div class="ptime">Torino · 1h fa</div></div>
-            <div class="pbadge"><div class="pbadge-dot"></div>HUMAN</div>
-          </div>
-          <div class="post-media">
-            <svg viewBox="0 0 300 300" width="100%" height="100%" style="background:#040404">
-              <path d="M40,100 Q80,60 120,85 Q160,110 200,70 Q240,30 270,55" stroke="#DFFF00" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <path d="M40,150 Q90,130 140,148 Q190,166 240,140" stroke="#DFFF00" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
-              <circle cx="80" cy="200" r="8" fill="#DFFF00" opacity=".8"/>
-              <circle cx="150" cy="205" r="5" fill="#DFFF00" opacity=".6"/>
-              <circle cx="220" cy="198" r="10" fill="#DFFF00" opacity=".9"/>
-              <path d="M60,240 Q150,220 240,238" stroke="#DFFF00" stroke-width="1.5" fill="none" opacity=".4"/>
-            </svg>
-            <div class="post-wm"><div class="wm-dot"></div><div class="wm-text"><span class="h">HEY</span><span class="p">PEOPLE</span></div></div>
-          </div>
-          <div class="react-bar">
-            <div class="rb" onclick="toggleReact(this,'smile')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M8.5 14.5 Q12 18 15.5 14.5" stroke-linecap="round"/></svg><span>28</span></div>
-            <div class="rb" onclick="toggleReact(this,'sad')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 15 Q12 12 15 15" stroke-linecap="round"/></svg><span>1</span></div>
-            <div class="write-rb"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Scrivi</span></div>
-          </div>
-        </div>
+    <!-- RESULT -->
+    <section class="screen" id="result">
+      <div class="result-wrap">
+        <div id="result-icon" style="width:64px;height:64px"></div>
+        <div class="result-title" id="result-title">HAI VINTO!</div>
+        <div style="font-size:13px;color:#999" id="result-sub">Challenge #1 superata</div>
 
-        <!-- Post 4 musica -->
-        <div class="post">
-          <div class="post-head">
-            <div class="av">MG</div>
-            <div class="pm"><div class="pname">Maya G.</div><div class="ptime">Manila · 2h fa</div></div>
+        <div class="panel" id="panel-win-bonus">
+          <h4 style="color:var(--neon);font-weight:900;letter-spacing:0.5px">STREAK BONUS</h4>
+          <div id="result-streak" style="font-size:16px;font-weight:900;color:#fff">STREAK × 5</div>
+          <div style="font-size:10px;color:#666;line-height:1.4">Se scegli vite, lo streak si azzera.</div>
+          <div class="two-btn">
+            <button class="btn btn-neon" id="btn-bonus-continue">CONTINUA</button>
+            <button class="btn btn-ghost" id="btn-bonus-vite">+2 VITE</button>
           </div>
-          <div class="post-music">
-            <div class="music-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-            <div class="music-info"><div class="music-title">Because of You</div><div class="music-sub">Kelly Clarkson · via YouTube</div></div>
-            <div class="music-waves">
-              <div class="wave" style="height:8px"></div><div class="wave" style="height:14px"></div><div class="wave" style="height:6px"></div><div class="wave" style="height:16px"></div><div class="wave" style="height:10px"></div>
             </div>
-          </div>
-          <div class="post-body" style="margin-bottom:0">"Questa canzone è quella sera che mi ha salvato."</div>
-          <div class="react-bar">
-            <div class="rb" onclick="toggleReact(this,'smile')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M8.5 14.5 Q12 18 15.5 14.5" stroke-linecap="round"/></svg><span>22</span></div>
-            <div class="rb" onclick="toggleReact(this,'sad')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 15 Q12 12 15 15" stroke-linecap="round"/></svg><span>8</span></div>
-            <div class="write-rb"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-12 2,6"/><polyline points="22,6 12,13 2,6"/></svg><span>Scrivi</span></div>
+
+        <div class="panel ai" id="panel-loss">
+          <h4 style="color:var(--neon);font-weight:900;letter-spacing:0.5px">HEYBOT VINCE</h4>
+          <div id="loss-sub">Vite rimaste: 0</div>
+          <div class="two-btn">
+            <button class="btn btn-neon" id="btn-retry">RIVINCITA</button>
+            <button class="btn btn-ghost" id="btn-back-home">TORNA HOME</button>
           </div>
         </div>
 
-        <!-- Footer privacy -->
-        <div style="padding:20px 20px 8px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-          <a href="https://www.iubenda.com/privacy-policy/99137709" class="iubenda-black iubenda-noiframe iubenda-embed" title="Privacy Policy" style="font-size:11px;color:var(--soft);text-decoration:none">Privacy Policy</a>
-          <a href="https://www.iubenda.com/privacy-policy/99137709/cookie-policy" class="iubenda-black iubenda-noiframe iubenda-embed" title="Cookie Policy" style="font-size:11px;color:var(--soft);text-decoration:none">Cookie Policy</a>
-        </div>
-        <div style="padding:4px 20px 20px;text-align:center;font-size:10px;color:#1e1e1e;letter-spacing:2px">HEYPEOPLE · Solo Umani · 2026</div>
-      </div>
+        <div class="panel ai" id="panel-vitezero">
+          <h4 style="color:var(--neon);font-weight:900;letter-spacing:0.5px">VITE ESAURITE</h4>
+          <div style="font-size:12px;color:#888;line-height:1.5">Ricarica completa tra 10 minuti.</div>
+          <div id="vitezero-timer" style="font-size:12px;color:var(--neon);font-weight:900">Caricamento...</div>
+          <button class="btn btn-ghost" id="btn-zero-back-home" style="margin-top:6px">TORNA HOME</button>
     </div>
 
-    <!-- Bottom nav -->
-    <div class="bnav">
-      <div class="bn on">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
-        Feed
+        <div style="margin-top:12px;width:100%;max-width:340px;display:none" id="win-next-wrap">
+          <button class="btn btn-neon" id="btn-next">PROSSIMA CHALLENGE</button>
+  </div>
+
+        <div class="panel" id="panel-quote" style="border-color:rgba(255,255,255,0.08);background:rgba(17,17,17,0.9)">
+          <div class="quote" id="result-quote">— HEYBOT</div>
+    </div>
       </div>
-      <div class="bn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Esplora</div>
-      <div class="bn-plus-wrap" onclick="showReply()">
-        <div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+    </section>
+
+    <!-- RANKING -->
+    <section class="screen" id="ranking">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--neon);font-weight:900;cursor:pointer" id="btn-back-home-ranking">&larr; INDIETRO</div>
+        </div>
+      <div style="font-family:'Bebas Neue',sans-serif;color:#fff;font-size:40px;letter-spacing:2px">THEWALL</div>
+      <div class="scroll">
+        <div class="panel show" style="max-width:none;text-align:left;align-items:stretch;border-color:rgba(255,255,255,0.08);background:rgba(17,17,17,0.5)">
+          <div id="ranking-list"></div>
+        </div>
+        </div>
+    </section>
+
+    <!-- INFO -->
+    <section class="screen" id="info">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--neon);font-weight:900;cursor:pointer" id="btn-back-home-info">&larr; INDIETRO</div>
+        </div>
+      <div style="font-family:'Bebas Neue',sans-serif;color:#fff;font-size:32px;letter-spacing:2px;margin-top:8px">INFORMAZIONI</div>
+      <div class="scroll">
+        <div class="panel show" style="max-width:none;text-align:left;align-items:stretch;border-color:var(--border);background:rgba(26,26,26,0.7)">
+          <h4 style="display:flex;align-items:center;gap:10px">
+            <span style="width:18px;height:18px;border:2px solid var(--neon);border-radius:6px;display:inline-flex;align-items:center;justify-content:center">
+              <span style="width:6px;height:6px;background:var(--neon);border-radius:2px;display:block"></span>
+            </span>
+            COS'È HEYBOT?
+          </h4>
+          <p style="color:#bbb;text-align:left;line-height:1.6">
+            HEYBOT è un’intelligenza artificiale “umana” sviluppata e controllata da HEYPEOPLE. Ogni partita è indipendente.
+          </p>
       </div>
-      <div class="bn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</div>
-      <div class="bn"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profilo</div>
+
+        <div class="panel show" style="max-width:none;text-align:left;align-items:stretch;border-color:var(--border);background:rgba(26,26,26,0.7)">
+          <h4 style="display:flex;align-items:center;gap:10px">
+            <span style="width:18px;height:18px;border:2px solid var(--neon);border-radius:6px;display:inline-flex;align-items:center;justify-content:center">
+              <span style="width:8px;height:10px;border:2px solid var(--neon);border-bottom:none;border-radius:6px 6px 0 0;display:block"></span>
+            </span>
+            SICUREZZA & PRIVACY
+          </h4>
+          <p style="color:#bbb;text-align:left;line-height:1.6">✓ Leggi la nostra Privacy Policy</p>
+          <p style="color:#bbb;text-align:left;line-height:1.6">✓ Niente vendita dati a terzi</p>
+      </div>
+
+        <div class="panel show" style="max-width:none;text-align:left;align-items:stretch;border-color:var(--border);background:rgba(26,26,26,0.7)">
+          <h4 style="display:flex;align-items:center;gap:10px">
+            <span style="width:18px;height:18px;border:2px solid var(--neon);border-radius:50%;display:inline-flex;align-items:center;justify-content:center">
+              <span style="width:2px;height:7px;background:var(--neon);border-radius:2px;display:block;transform:translateY(-1px)"></span>
+            </span>
+            LIMITI DI UTILIZZO
+          </h4>
+          <p style="color:#bbb;text-align:left;line-height:1.6">• 3 partite giornaliere (reset 00:00)</p>
+          <p style="color:#bbb;text-align:left;line-height:1.6">• Limite di account: 1 per email</p>
+      </div>
+
+        <div class="panel show" style="max-width:none;text-align:left;align-items:stretch;border-color:var(--border);background:rgba(26,26,26,0.7)">
+          <h4 style="display:flex;align-items:center;gap:10px">
+            <span style="width:18px;height:18px;border:2px solid var(--neon);border-radius:6px;display:inline-flex;align-items:center;justify-content:center">
+              <span style="width:8px;height:2px;background:var(--neon);border-radius:2px;display:block"></span>
+            </span>
+            CONTATTI
+          </h4>
+          <p style="color:#bbb;text-align:left;line-height:1.6">FOUNDER: bilsdolor@gmail.com</p>
+        </div>
+          </div>
+    </section>
+      </div>
+
+  <!-- Desktop gate overlay -->
+  <div id="desktop-gate" aria-hidden="true">
+    <div class="gate-card">
+      <div class="dot" style="margin:0 auto"></div>
+      <div class="gate-title">
+        <span style="color:var(--white)">HEY</span><span class="p">PEOPLE</span>
+          </div>
+      <div class="gate-text">
+        Questa è una PWA pensata per il telefono.<br/>
+        Aprila da iPhone/Android per l’esperienza completa.
+        </div>
+      <div class="qr-hint">
+        Vuoi solo controllare la grafica? Usa l’anteprima desktop.
+      </div>
+      <button class="btn btn-neon btn-neon-small" id="btn-desktop-preview">CONTINUA ANTEPRIMA DESKTOP</button>
     </div>
   </div>
 
-  <!-- ══ REPLY SCREEN ══ -->
-  <div class="screen" id="reply" style="display:flex;flex-direction:column">
-    <div class="reply-header">
-      <div class="back-btn" onclick="showMain()"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></div>
-      <div class="reply-title">OGGI</div>
-    </div>
-    <div class="reply-scroll">
-      <!-- DQ mini -->
-      <div class="reply-dq">
-        <div class="dq-label"><div class="dq-dot"></div><div class="dq-tag">Domanda del giorno</div></div>
-        <div class="dq-text" id="reply-dq-text">"Qual è l'ultima cosa che ti ha fatto sorridere davvero?"</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--neon);margin-top:8px;letter-spacing:2px" id="reply-timer">01:23 <span style="font-size:10px;color:var(--soft);font-family:'DM Sans';font-weight:400">ore rimaste</span></div>
-      </div>
-
-      <!-- Format selector -->
-      <div style="padding:0 16px 8px;font-size:8px;color:var(--soft);letter-spacing:1px;text-transform:uppercase">Scegli formato</div>
-      <div class="fmt-grid">
-        <div class="fmt-btn on" onclick="selectFmt('testo',this)">
-          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          <span class="fmt-label">TESTO</span>
-        </div>
-        <div class="fmt-btn" onclick="selectFmt('foto',this)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
-          <span class="fmt-label">FOTO</span>
-        </div>
-        <div class="fmt-btn" onclick="selectFmt('disegno',this)">
-          <svg viewBox="0 0 24 24"><path d="M2 20h20"/><path d="M6 20V10l6-6 6 6v10"/></svg>
-          <span class="fmt-label">DISEGNO</span>
-        </div>
-        <div class="fmt-btn" onclick="selectFmt('musica',this)">
-          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-          <span class="fmt-label">MUSICA</span>
-        </div>
-      </div>
-
-      <!-- TESTO -->
-      <div id="fmt-testo">
-        <div class="textarea-wrap">
-          <textarea class="reply-textarea" id="reply-text" placeholder="Scrivi qui — niente filtri, niente AI. Solo le tue parole." maxlength="280" oninput="updateCharCount()"></textarea>
-        </div>
-        <div class="char-count"><div class="char-dot"></div><span id="char-count">0</span>/280 caratteri · Solo tue parole</div>
-      </div>
-
-      <!-- FOTO -->
-      <div id="fmt-foto" class="hidden">
-        <div class="camera-wrap">
-          <div class="camera-vf">
-            <div class="vf-corners">
-              <div class="vf-tl"></div><div class="vf-tr"></div><div class="vf-bl"></div><div class="vf-br"></div>
-            </div>
-            <div class="vf-center"></div>
-            <div class="vf-label">SOLO SCATTO LIVE</div>
-            <div class="post-wm" style="bottom:8px;right:8px"><div class="wm-dot"></div><div class="wm-text"><span class="h">HEY</span><span class="p">PEOPLE</span></div></div>
-          </div>
-        </div>
-        <div class="shutter-wrap"><div class="shutter"><div class="shutter-inner"></div></div></div>
-        <div style="padding:4px 16px 8px;font-size:9px;color:var(--soft);text-align:center">Formato quadrato · Watermark HEYPEOPLE automatico</div>
-      </div>
-
-      <!-- DISEGNO -->
-      <div id="fmt-disegno" class="hidden">
-        <div class="canvas-wrap">
-          <canvas id="drawing-canvas"></canvas>
-          <div class="canvas-wm post-wm"><div class="wm-dot"></div><div class="wm-text"><span class="h">HEY</span><span class="p">PEOPLE</span></div></div>
-        </div>
-        <div class="canvas-toolbar">
-          <div class="tool-btn on" id="tool-pencil" onclick="setTool('pencil')">
-            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div class="tool-btn" id="tool-text" onclick="setTool('text')">
-            <svg viewBox="0 0 24 24"><polyline points="4,7 4,4 20,4 20,7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-          </div>
-          <div class="tool-btn" id="tool-eraser" onclick="setTool('eraser')">
-            <svg viewBox="0 0 24 24"><path d="M20 20H7L3 16l10-10 7 7-2.5 2.5"/></svg>
-          </div>
-          <div class="brush-sizes">
-            <div class="bs" style="width:4px;height:4px" onclick="setBrush(2, this)"></div>
-            <div class="bs on" style="width:7px;height:7px;margin:0 2px" onclick="setBrush(4, this)"></div>
-            <div class="bs" style="width:11px;height:11px" onclick="setBrush(8, this)"></div>
-          </div>
-          <div style="margin-left:auto;font-size:8px;color:var(--soft);cursor:pointer;border:1px solid var(--b2);border-radius:6px;padding:4px 8px" onclick="clearCanvas()">Cancella</div>
-        </div>
-      </div>
-
-      <!-- MUSICA -->
-      <div id="fmt-musica" class="hidden">
-        <div class="music-input-wrap">
-          <div style="font-size:8px;color:var(--soft);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">1 — Incolla il link YouTube</div>
-          <div class="music-link-field">
-            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            <input type="url" id="yt-link" placeholder="https://youtube.com/watch?v=..." oninput="checkYTLink()">
-          </div>
-          <div style="font-size:8px;color:var(--soft);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">2 — Perché hai scelto questa canzone?</div>
-          <textarea class="music-why" placeholder="Questa canzone mi ricorda... / Mi fa sentire..."></textarea>
-          <div style="margin-top:8px;font-size:9px;color:var(--soft);text-align:center">Zero copyright · Solo link · Suona in background mentre navighi</div>
-        </div>
-      </div>
-
-      <!-- Publish -->
-      <div class="publish-wrap">
-        <button class="btn-neon" onclick="publishReply()"><div class="btn-dot"></div>PUBBLICA</button>
+  <!-- Cookie banner -->
+  <div id="cookie-banner" role="dialog" aria-label="Cookie banner">
+    <div class="inner">
+      <div class="top">
+        <div class="dot"></div>
+        <div style="flex:1;font-size:12px;color:#aaa;line-height:1.6">
+          <strong>HEYPEOPLE</strong> usa cookie tecnici per funzionare.
+          <div style="margin-top:8px;font-size:11px;color:#999">
+            Leggi la <a href="https://www.iubenda.com/privacy-policy/99137709" target="_blank" style="color:var(--neon)">Privacy Policy</a> e la
+            <a href="https://www.iubenda.com/privacy-policy/99137709/cookie-policy" target="_blank" style="color:var(--neon)">Cookie Policy</a>.
       </div>
     </div>
-  </div>
-
-</div><!-- end #app -->
-
-<!-- ══ COOKIE BANNER ══ -->
-<div id="cookie-banner">
-  <div class="cb-inner">
-    <div class="cb-top">
-      <div class="cb-icon"><div class="cb-dot"></div></div>
-      <div class="cb-text">
-        <strong>HEYPEOPLE</strong> usa cookie tecnici per funzionare. Con il tuo consenso, anche cookie analitici per migliorare l'esperienza.
-        Leggi la <a href="https://www.iubenda.com/privacy-policy/99137709" target="_blank">Privacy Policy</a> e la <a href="https://www.iubenda.com/privacy-policy/99137709/cookie-policy" target="_blank">Cookie Policy</a>.
-      </div>
     </div>
-    <div class="cb-btns">
-      <button class="cb-reject" onclick="rejectCookies()">RIFIUTA</button>
-      <button class="cb-accept" onclick="acceptCookies()">ACCETTA</button>
-    </div>
+      <div class="btns">
+        <button type="button" id="btn-cookie-reject">RIFIUTA</button>
+        <button type="button" class="accept" id="btn-cookie-accept">ACCETTA</button>
   </div>
 </div>
-
-<div id="desktop-screen">
-  <div style="position:absolute;inset:0;background:radial-gradient(circle at 50%,rgba(223,255,0,0.04),transparent 60%)"></div>
-  <div style="width:10px;height:10px;background:var(--neon);border-radius:50%;margin-bottom:24px;box-shadow:0 0 20px var(--glow);animation:dp 2s infinite;position:relative;z-index:1"></div>
-  <div class="ds-logo" style="position:relative;z-index:1">
-    <span class="h">HEY</span>
-    <span class="p">PEOPLE</span>
-  </div>
-  <div class="ds-text" style="position:relative;z-index:1">
-    HEYPEOPLE è pensata per il <strong>tuo telefono.</strong><br>Aprila da mobile per l'esperienza completa.
-  </div>
-  <div class="ds-url" style="position:relative;z-index:1">heypeople-it.vercel.app</div>
-  <div class="ds-sub" style="position:relative;z-index:1">Apri Safari o Chrome sul tuo iPhone o Android</div>
-  <button class="btn-neon" style="margin-top:18px;max-width:280px;position:relative;z-index:1" onclick="continueDesktopPreview()">
-    <div class="btn-dot"></div>
-    CONTINUA ANTEPRIMA DESKTOP
-  </button>
 </div>
 
-<script>
-// Desktop detection
-const HP_PREVIEW_QUERY = new URLSearchParams(window.location.search).get("preview");
-const HP_ALLOW_DESKTOP = HP_PREVIEW_QUERY === "1" || localStorage.getItem("hp-desktop-preview") === "1";
-if (window.innerWidth > 768 && !/Mobi|Android/i.test(navigator.userAgent) && !HP_ALLOW_DESKTOP) {
-  document.getElementById('desktop-screen').classList.add('show');
-}
-function continueDesktopPreview() {
-  localStorage.setItem("hp-desktop-preview", "1");
-  document.getElementById('desktop-screen').classList.remove('show');
-}
-</script>
+  <!-- Supabase client (serve solo quando sei su Vercel/https) -->
+  <script type="module" src="./supabase.js"></script>
 
 <script>
-// ═══ STATE ═══
-let currentFmt = 'testo';
-let hasReplied = false;
-let drawingTool = 'pencil';
-let brushSize = 4;
-let isDrawing = false;
-let lastX = 0, lastY = 0;
-let ctx = null;
+    /* ===== Helpers ===== */
+    function showScreen(id){
+      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+      const el=document.getElementById(id);
+      if(el) el.classList.add("active");
+      if (id !== "game") clearTurnTimer();
+    }
+    function escapeHtml(str){
+      return (str||"")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-// ═══ SCREEN NAVIGATION ═══
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => {
-    s.classList.remove('active');
-    s.style.display = 'none';
-  });
-  const target = document.getElementById(id);
-  target.style.display = 'flex';
-  setTimeout(() => target.classList.add('active'), 10);
-}
+    /* ===== Desktop gate ===== */
+    const previewParam = new URLSearchParams(window.location.search).get("preview");
+    const allowDesktop = previewParam === "1" || localStorage.getItem("hp-desktop-preview") === "1";
+    const isDesktop = window.innerWidth > 768 && !/Mobi|Android/i.test(navigator.userAgent);
+    if(isDesktop && !allowDesktop){
+      document.getElementById("desktop-gate").classList.add("show");
+      document.getElementById("desktop-gate").setAttribute("aria-hidden","false");
+    }
+    document.getElementById("btn-desktop-preview").addEventListener("click", ()=>{
+      localStorage.setItem("hp-desktop-preview","1");
+      document.getElementById("desktop-gate").classList.remove("show");
+      document.getElementById("desktop-gate").setAttribute("aria-hidden","true");
+      showScreen("splash");
+    });
 
-function showWelcome() { showScreen('welcome'); }
-function startOnboarding() {
-  showScreen('onboarding');
-  const firstName = document.getElementById('first-name');
-  if (firstName) firstName.focus();
-}
-function showMain() {
-  showScreen('main');
-  if (hasReplied) {
-    document.getElementById('locked-section').classList.add('hidden');
-    document.getElementById('unlocked-section').classList.remove('hidden');
-    document.getElementById('dq-label-text').textContent = 'Hai risposto oggi';
-  }
-}
-function showReply() { showScreen('reply'); }
-
-// ═══ FORMAT SELECTION ═══
-function selectFmt(fmt, btn) {
-  currentFmt = fmt;
-  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  ['testo','foto','disegno','musica'].forEach(f => {
-    const el = document.getElementById('fmt-'+f);
-    el.classList.toggle('hidden', f !== fmt);
-  });
-  if (fmt === 'disegno') initCanvas();
-}
-
-// ═══ CHAR COUNT ═══
-function updateCharCount() {
-  const v = document.getElementById('reply-text').value.length;
-  document.getElementById('char-count').textContent = v;
-}
-
-// ═══ REACTIONS ═══
-function toggleReact(btn, type) {
-  const isSmile = type === 'smile';
-  const onClass = isSmile ? 'smile-on' : 'sad-on';
-  const otherClass = isSmile ? 'sad-on' : 'smile-on';
-  const siblings = btn.parentElement.querySelectorAll('.rb');
-  siblings.forEach(s => {
-    if (s === btn) {
-      const wasOn = s.classList.contains(onClass);
-      s.classList.remove(onClass, otherClass);
-      if (!wasOn) {
-        s.classList.add(onClass);
-        const num = parseInt(s.querySelector('span').textContent);
-        s.querySelector('span').textContent = num + 1;
-      } else {
-        const num = parseInt(s.querySelector('span').textContent);
-        s.querySelector('span').textContent = num - 1;
+    /* ===== Cookie banner ===== */
+    function hideCookieBanner(){
+      const b=document.getElementById("cookie-banner");
+      b.classList.remove("show");
+      b.style.display="none";
+    }
+    document.getElementById("btn-cookie-accept").addEventListener("click", ()=>{
+      localStorage.setItem("hp-cookies","accepted");
+      hideCookieBanner();
+    });
+    document.getElementById("btn-cookie-reject").addEventListener("click", ()=>{
+      localStorage.setItem("hp-cookies","rejected");
+      hideCookieBanner();
+    });
+    function initCookieBanner(){
+      if(!localStorage.getItem("hp-cookies")){
+        setTimeout(()=>{
+          const b=document.getElementById("cookie-banner");
+          b.classList.add("show");
+          b.style.display="flex";
+        }, 2000);
       }
-    } else {
-      if (s.classList.contains(otherClass)) {
-        const num = parseInt(s.querySelector('span').textContent);
-        s.querySelector('span').textContent = Math.max(0, num - 1);
+    }
+
+    /* ===== Auth state (preview bypass su file://) ===== */
+    const BLOCKED = ["tempmail","10min","10minutemail","guerrilla","guerrillamail","yopmail","mailinator","trashmail","dispostable","getnada","sharklasers","moakt","mintemail","fakeinbox","throwawaymail"];
+    function isTempMail(email){
+      const e=(email||"").toLowerCase();
+      return BLOCKED.some(k=>e.includes(k));
+    }
+
+    let isLoggedIn=false;
+    let nickname="";
+    let vite=5;
+    let streak=0;
+    let challenge=1;
+
+    function loadMeta(){
+      vite = Math.max(0, Number(localStorage.getItem("hp-vite") ?? 5));
+      streak = Math.max(0, Number(localStorage.getItem("hp-streak") ?? 0));
+      challenge = Math.max(1, Number(localStorage.getItem("hp-challenge") ?? 1));
+
+      // Refill vite: completo dopo 10 minuti da esaurimento
+      const emptyAt = Number(localStorage.getItem("hp-vite-empty-at") || 0);
+      if (vite === 0 && emptyAt > 0) {
+        const TEN_MIN_MS = 10 * 60 * 1000;
+        if (Date.now() - emptyAt >= TEN_MIN_MS) {
+          vite = 5;
+          localStorage.removeItem("hp-vite-empty-at");
+        }
       }
-      s.classList.remove(onClass, otherClass);
     }
-  });
-}
-
-// ═══ PUBLISH ═══
-function publishReply() {
-  hasReplied = true;
-  showMain();
-}
-
-// ═══ CANVAS DRAWING ═══
-function initCanvas() {
-  const canvas = document.getElementById('drawing-canvas');
-  if (!canvas || ctx) return;
-  const size = canvas.offsetWidth;
-  canvas.width = size * window.devicePixelRatio;
-  canvas.height = size * window.devicePixelRatio;
-  ctx = canvas.getContext('2d');
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  ctx.strokeStyle = '#DFFF00';
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.lineWidth = brushSize;
-
-  canvas.addEventListener('mousedown', startDraw);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDraw);
-  canvas.addEventListener('mouseleave', stopDraw);
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); const t = e.touches[0]; const r = canvas.getBoundingClientRect(); startDraw({offsetX: t.clientX - r.left, offsetY: t.clientY - r.top}); }, {passive:false});
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); const t = e.touches[0]; const r = canvas.getBoundingClientRect(); draw({offsetX: t.clientX - r.left, offsetY: t.clientY - r.top}); }, {passive:false});
-  canvas.addEventListener('touchend', stopDraw);
-}
-
-function startDraw(e) {
-  if (drawingTool !== 'pencil' && drawingTool !== 'eraser') return;
-  isDrawing = true;
-  [lastX, lastY] = [e.offsetX, e.offsetY];
-  ctx.beginPath();
-  ctx.arc(lastX, lastY, ctx.lineWidth/2, 0, Math.PI*2);
-  ctx.fillStyle = drawingTool === 'eraser' ? '#040404' : '#DFFF00';
-  ctx.fill();
-}
-
-function draw(e) {
-  if (!isDrawing) return;
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.strokeStyle = drawingTool === 'eraser' ? '#040404' : '#DFFF00';
-  ctx.lineWidth = drawingTool === 'eraser' ? brushSize * 4 : brushSize;
-  ctx.stroke();
-  [lastX, lastY] = [e.offsetX, e.offsetY];
-}
-
-function stopDraw() { isDrawing = false; }
-
-function setTool(t) {
-  drawingTool = t;
-  document.getElementById('tool-pencil').classList.toggle('on', t === 'pencil');
-  document.getElementById('tool-text').classList.toggle('on', t === 'text');
-  document.getElementById('tool-eraser').classList.toggle('on', t === 'eraser');
-}
-
-function setBrush(s, el) {
-  brushSize = s;
-  if (ctx) ctx.lineWidth = s;
-  document.querySelectorAll('.bs').forEach(b => b.classList.remove('on'));
-  if (el) el.classList.add('on');
-}
-
-function clearCanvas() {
-  if (!ctx) return;
-  const c = document.getElementById('drawing-canvas');
-  ctx.clearRect(0, 0, c.width, c.height);
-}
-
-// ═══ YOUTUBE LINK ═══
-function checkYTLink() {
-  const link = document.getElementById('yt-link').value;
-  const preview = document.querySelector('.music-preview');
-  if (link.includes('youtube.com') || link.includes('youtu.be')) {
-    preview.style.display = 'flex';
-  }
-}
-
-// ═══ COOKIE BANNER ═══
-function initCookieBanner() {
-  if (!localStorage.getItem('hp-cookies')) {
-    setTimeout(() => {
-      document.getElementById('cookie-banner').classList.add('show');
-    }, 3000);
-  }
-}
-
-function acceptCookies() {
-  localStorage.setItem('hp-cookies', 'accepted');
-  hideBanner();
-}
-
-function rejectCookies() {
-  localStorage.setItem('hp-cookies', 'rejected');
-  hideBanner();
-}
-
-function hideBanner() {
-  const b = document.getElementById('cookie-banner');
-  b.style.transform = 'translateY(100%)';
-  setTimeout(() => b.style.display = 'none', 400);
-}
-
-// ═══ INIT ═══
-document.addEventListener('DOMContentLoaded', () => {
-  initCookieBanner();
-  document.getElementById('splash').style.display = 'flex';
-});
-</script>
-<!-- Client Supabase -->
-<script type="module" src="supabase.js"></script>
-<!-- HEYPEOPLE · Auth & Session -->
-<script type="module">
-  import { supabase } from "./supabase.js";
-
-  // Anti-tempmail (blocca domini usa-e-getta)
-  const BLOCKED = [
-    "tempmail", "10min", "10minutemail", "guerrilla", "guerrillamail",
-    "yopmail", "mailinator", "trashmail", "dispostable", "getnada",
-    "sharklasers", "moakt", "mintemail", "fakeinbox", "throwawaymail"
-  ];
-  function isTempMail(email) {
-    const e = (email || "").toLowerCase();
-    return BLOCKED.some(k => e.includes(k));
-  }
-
-  function normalizeName(value) {
-    return (value || "").trim().replace(/\s+/g, " ");
-  }
-
-  function setOnboardingError(message, showAlert) {
-    const errEl = document.getElementById("onboarding-error");
-    if (errEl) errEl.textContent = message || "";
-    if (showAlert && message) alert(message);
-  }
-
-  function savePendingProfile(firstName, lastName, email) {
-    localStorage.setItem("hp-first-name", firstName);
-    localStorage.setItem("hp-last-name", lastName);
-    localStorage.setItem("hp-email", email);
-  }
-
-  function applyStoredProfileToWelcome() {
-    const firstName = localStorage.getItem("hp-first-name") || "";
-    const lastName = localStorage.getItem("hp-last-name") || "";
-    const fullName = `${firstName} ${lastName}`.trim();
-    if (!fullName) return;
-    const initials = `${firstName[0] || ""}${lastName[0] || ""}`.toUpperCase();
-    const av = document.getElementById("welcome-av");
-    const name = document.getElementById("welcome-name");
-    if (av) av.textContent = initials || "HP";
-    if (name) name.textContent = fullName.toUpperCase();
-  }
-
-  async function upsertProfileFromLocal(session) {
-    const userId = session?.user?.id;
-    if (!userId) return;
-    const firstName = normalizeName(localStorage.getItem("hp-first-name"));
-    const lastName = normalizeName(localStorage.getItem("hp-last-name"));
-    const email = (localStorage.getItem("hp-email") || session?.user?.email || "").trim();
-    if (!firstName || !lastName || !email) return;
-
-    const { error } = await supabase.from("profiles").upsert({
-      id: userId,
-      first_name: firstName,
-      last_name: lastName,
-      email: email
-    }, { onConflict: "id" });
-    if (error) throw error;
-  }
-
-  async function loadProfileToUi(session) {
-    const userId = session?.user?.id;
-    if (!userId) return;
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("first_name,last_name,email")
-      .eq("id", userId)
-      .single();
-    if (error || !data) return;
-
-    if (data.first_name) localStorage.setItem("hp-first-name", data.first_name);
-    if (data.last_name) localStorage.setItem("hp-last-name", data.last_name);
-    if (data.email) localStorage.setItem("hp-email", data.email);
-    applyStoredProfileToWelcome();
-  }
-
-  // Flusso onboarding: nome+cognome+email -> OTP
-  window.submitOnboarding = async function () {
-    setOnboardingError("");
-    const firstNameInput = document.getElementById("first-name");
-    const lastNameInput = document.getElementById("last-name");
-    const input = document.getElementById("auth-email");
-    const firstName = normalizeName(firstNameInput?.value);
-    const lastName = normalizeName(lastNameInput?.value);
-    const email = (input?.value || "").trim();
-    if (!firstName || !lastName) { setOnboardingError("Inserisci nome e cognome."); return; }
-    if (!email) { setOnboardingError("Inserisci la tua email."); return; }
-    if (isTempMail(email)) { setOnboardingError("Email temporanea non permessa."); return; }
-
-    if (window.location.protocol === "file:") {
-      setOnboardingError("Apri l'app da localhost o Vercel, non direttamente dal file.", true);
-      return;
+    function saveMeta(){
+      localStorage.setItem("hp-vite", String(vite));
+      localStorage.setItem("hp-streak", String(streak));
+      localStorage.setItem("hp-challenge", String(challenge));
     }
-    if (!supabase || !supabase.auth) {
-      setOnboardingError("Connessione auth non pronta. Ricarica la pagina.", true);
-      return;
+    function updateHomeUI(){
+      document.getElementById("home-nickname").textContent = nickname || "YOU";
+      document.getElementById("home-streak").textContent = String(streak);
+      document.getElementById("home-vite").textContent = String(vite);
+      document.getElementById("home-challenge").textContent = "#" + String(challenge);
+      document.getElementById("game-challenge").textContent = "#" + String(challenge);
     }
 
-    savePendingProfile(firstName, lastName, email);
-    const btn = document.querySelector('#onboarding .btn-neon');
-    if (btn) {
-      btn.disabled = true;
-      btn.style.opacity = "0.7";
-      btn.style.pointerEvents = "none";
-    }
-
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: window.location.origin }
+    function waitForSupabase(){
+      return new Promise((resolve)=>{
+        const start=Date.now();
+        const tick=()=>{
+          if(window.supabase && window.supabase.auth) return resolve(window.supabase);
+          if(Date.now()-start>8000) return resolve(null);
+          setTimeout(tick,100);
+        };
+        tick();
       });
-      if (error) throw error;
-      setOnboardingError("Controlla la tua email e apri il link ricevuto per entrare.", true);
-    } catch (err) {
-      setOnboardingError("Errore accesso email: " + err.message, true);
-      console.error(err);
-    } finally {
-      if (btn) {
-        btn.disabled = false;
-        btn.style.opacity = "";
-        btn.style.pointerEvents = "";
-      }
     }
-  };
 
-  // Logout
-  window.hpLogout = async function () {
-    await supabase.auth.signOut();
-    showScreen("splash");
-  };
+    async function initAuth(){
+      loadMeta();
+      nickname = localStorage.getItem("hp-nickname") || "";
+      updateHomeUI();
 
-  // Controllo sessione all’avvio
-  async function checkSessionOnLoad() {
-    applyStoredProfileToWelcome();
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      try {
-        await upsertProfileFromLocal(session);
-        await loadProfileToUi(session);
-      } catch (profileError) {
-        console.error("Profile sync error:", profileError);
+      const isFile = window.location.protocol === "file:";
+      const previewAllowed = isFile && allowDesktop;
+      if(previewAllowed){
+        isLoggedIn=true;
+        if(!nickname) nickname="PREVIEW";
+        updateHomeUI();
+        showScreen("home");
+        return;
       }
-      showMain();
-    } else {
-      showScreen("splash");
-    }
-  }
 
-  // Reagisci ai cambi sessione (login / logout)
-  supabase.auth.onAuthStateChange(async (_event, session) => {
-    if (session) {
-      try {
-        await upsertProfileFromLocal(session);
-        await loadProfileToUi(session);
-      } catch (profileError) {
-        console.error("Profile sync error:", profileError);
+      const sup = await waitForSupabase();
+      if(!sup){
+        showScreen("login");
+        return;
       }
-      showMain();
+
+      const { data:{ session } } = await sup.auth.getSession();
+      isLoggedIn = !!session;
+      if(isLoggedIn){
+        if(!nickname) nickname="HUMAN";
+        updateHomeUI();
+        showScreen("home");
+      } else {
+        showScreen("login");
+      }
+
+      sup.auth.onAuthStateChange((_event, session)=>{
+        isLoggedIn = !!session;
+        if(isLoggedIn){
+          updateHomeUI();
+          showScreen("home");
     } else {
-      showScreen("splash");
+          showScreen("login");
     }
   });
+}
 
-  // Avvio
-  document.addEventListener("DOMContentLoaded", checkSessionOnLoad);
+    /* ===== HEYBOT / Connect Four ===== */
+    const ROWS=6, COLS=7;
+    const EMPTY=0, HUMAN=1, AI=2;
+    const TURN_SECONDS=30;
+
+    let board = Array(ROWS*COLS).fill(0);
+    let currentTurn="human";
+    let gameOver=false;
+    let turnInterval=null;
+    let turnDeadlineMs=0;
+
+    // AI variability per match
+    let aiSeed=1;
+    let aiRng=()=>Math.random();
+    function mulberry32(a){
+      return function(){
+        let t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    const fraseHeybot={
+      win:[
+        "\"Questa volta hai vinto, ma la prossima challenge sarò diverso. Te lo garantisco.\" — HEYBOT",
+        "\"Interessante strategia. Non mi è piaciuta. Prepara un piano B.\" — HEYBOT",
+        "\"Ok, bravo. Ma ricordati: gli umani si stancano, io no.\" — HEYBOT"
+      ],
+      winStreak:[
+        "\"Lo streak ti sta aiutando. Goditi il momento.\" — HEYBOT",
+        "\"Sei in formato oggi. Mi interessa vedere fino a che punto arrivi.\" — HEYBOT"
+      ],
+      loss:[
+        "\"Te l'avevo detto. Torna domani, magari avrai più chance.\" — HEYBOT",
+        "\"Non è stata una competizione. È stato un tutorial.\" — HEYBOT"
+      ],
+      lossZeroVite:[
+        "\"Zero vite. Zero chance. Torna domani se hai coraggio.\" — HEYBOT",
+        "\"Troppo facile. Torna quando avrai imparato a giocare.\" — HEYBOT"
+      ]
+    };
+    function getRandomFrase(type){
+      const arr=fraseHeybot[type]||[];
+      return arr.length ? arr[Math.floor(Math.random()*arr.length)] : "— HEYBOT";
+    }
+
+    function idx(r,c){return r*COLS+c;}
+    function getValidColumns(b){
+      const valid=[];
+      for(let c=0;c<COLS;c++) if(b[idx(0,c)]===EMPTY) valid.push(c);
+      return valid;
+    }
+    function findDropRow(b,col){
+      for(let r=ROWS-1;r>=0;r--) if(b[idx(r,col)]===EMPTY) return r;
+      return -1;
+    }
+    function applyMove(b,col,player){
+      const r=findDropRow(b,col);
+      if(r<0) return null;
+      const nb=b.slice();
+      nb[idx(r,col)] = player;
+      return nb;
+    }
+    function findWinningLine(b, player){
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-3;c++){
+        const i=idx(r,c);
+        if(b[i]===player&&b[i+1]===player&&b[i+2]===player&&b[i+3]===player) return [i,i+1,i+2,i+3];
+      }
+      for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-3;r++){
+        const i=idx(r,c);
+        if(b[i]===player&&b[i+COLS]===player&&b[i+2*COLS]===player&&b[i+3*COLS]===player) return [i,i+COLS,i+2*COLS,i+3*COLS];
+      }
+      for(let r=0;r<ROWS-3;r++) for(let c=0;c<COLS-3;c++){
+        const i=idx(r,c);
+        if(b[i]===player&&b[i+COLS+1]===player&&b[i+2*COLS+2]===player&&b[i+3*COLS+3]===player) return [i,i+COLS+1,i+2*COLS+2,i+3*COLS+3];
+      }
+      for(let r=0;r<ROWS-3;r++) for(let c=3;c<COLS;c++){
+        const i=idx(r,c);
+        if(b[i]===player&&b[i+COLS-1]===player&&b[i+2*COLS-2]===player&&b[i+3*COLS-3]===player) return [i,i+COLS-1,i+2*COLS-2,i+3*COLS-3];
+      }
+      return null;
+    }
+    function checkWin(b, player){ return !!findWinningLine(b, player); }
+    function isDraw(b){return getValidColumns(b).length===0 && !checkWin(b,HUMAN) && !checkWin(b,AI);}
+
+    function evaluateSegment(countAI,countH){
+      if(countAI>0 && countH>0) return 0;
+      if(countAI===4) return 100000;
+      if(countH===4) return -100000;
+      if(countAI>0 && countH===0) return [0,1,10,50][countAI]||0;
+      if(countH>0 && countAI===0) return -([0,1,10,50][countH]||0);
+      return 0;
+    }
+    function evaluateBoard(b){
+      let score=0;
+      const centerCol=Math.floor(COLS/2);
+      for(let r=0;r<ROWS;r++){
+        const v=b[idx(r,centerCol)];
+        if(v===AI) score+=3;
+        if(v===HUMAN) score-=3;
+      }
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-3;c++){
+        const cells=[b[idx(r,c)],b[idx(r,c+1)],b[idx(r,c+2)],b[idx(r,c+3)]];
+        score += evaluateSegment(cells.filter(x=>x===AI).length, cells.filter(x=>x===HUMAN).length);
+      }
+      for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-3;r++){
+        const cells=[b[idx(r,c)],b[idx(r+1,c)],b[idx(r+2,c)],b[idx(r+3,c)]];
+        score += evaluateSegment(cells.filter(x=>x===AI).length, cells.filter(x=>x===HUMAN).length);
+      }
+      for(let r=0;r<ROWS-3;r++) for(let c=0;c<COLS-3;c++){
+        const cells=[b[idx(r,c)],b[idx(r+1,c+1)],b[idx(r+2,c+2)],b[idx(r+3,c+3)]];
+        score += evaluateSegment(cells.filter(x=>x===AI).length, cells.filter(x=>x===HUMAN).length);
+      }
+      for(let r=0;r<ROWS-3;r++) for(let c=3;c<COLS;c++){
+        const cells=[b[idx(r,c)],b[idx(r+1,c-1)],b[idx(r+2,c-2)],b[idx(r+3,c-3)]];
+        score += evaluateSegment(cells.filter(x=>x===AI).length, cells.filter(x=>x===HUMAN).length);
+      }
+      return score;
+    }
+
+    function getDepthForChallenge(ch){
+      // media già dal challenge #1
+      const map={1:3,2:4,3:5,4:6,5:7};
+      return map[Math.min(Math.max(ch,1),5)] || 3;
+    }
+    function orderColumns(valid){
+      const center=Math.floor(COLS/2);
+      return valid.slice().sort((a,b)=>Math.abs(a-center)-Math.abs(b-center));
+    }
+    function minimax(b, depth, alpha, beta, maximizing){
+      const valid=getValidColumns(b);
+      const terminal = checkWin(b,AI) || checkWin(b,HUMAN) || valid.length===0;
+      if(depth===0 || terminal){
+        if(terminal){
+          if(checkWin(b,AI)) return 100000 - depth;
+          if(checkWin(b,HUMAN)) return -100000 + depth;
+          return 0;
+        }
+        return evaluateBoard(b);
+      }
+      const cols=orderColumns(valid);
+      if(maximizing){
+        let value=-Infinity;
+        for(const col of cols){
+          const nb=applyMove(b,col,AI);
+          if(!nb) continue;
+          value=Math.max(value, minimax(nb, depth-1, alpha, beta, false));
+          alpha=Math.max(alpha,value);
+          if(beta<=alpha) break;
+        }
+        return value;
+      }
+      let value=Infinity;
+      for(const col of cols){
+        const nb=applyMove(b,col,HUMAN);
+        if(!nb) continue;
+        value=Math.min(value, minimax(nb, depth-1, alpha, beta, true));
+        beta=Math.min(beta,value);
+        if(beta<=alpha) break;
+      }
+      return value;
+    }
+    function chooseAIMove(){
+      const valid=getValidColumns(board);
+      if(!valid.length) return null;
+      const depth=getDepthForChallenge(challenge);
+
+      // variazione per match
+      const randomChance=Math.max(0.05, 0.12 - depth*0.012);
+      if(aiRng() < randomChance && valid.length>1) return valid[Math.floor(aiRng()*valid.length)];
+
+      const cols=orderColumns(valid);
+      let best=-Infinity;
+      let candidates=[];
+      for(const col of cols){
+        const nb=applyMove(board,col,AI);
+        if(!nb) continue;
+        const score=minimax(nb, depth-1, -Infinity, Infinity, false);
+        if(score>best){best=score;candidates=[col];}
+        else if(score>=best-5){candidates.push(col);}
+      }
+      return candidates.length ? candidates[Math.floor(aiRng()*candidates.length)] : cols[0];
+    }
+
+    function renderBoard(){
+      const el=document.getElementById("board");
+      el.innerHTML="";
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+        const v=board[idx(r,c)];
+        const cell=document.createElement("div");
+        cell.className="cell " + (v===HUMAN?"human":v===AI?"ai":"empty");
+        cell.dataset.col=String(c);
+        cell.dataset.i=String(idx(r,c));
+        cell.innerHTML="<div class='piece'></div>";
+        el.appendChild(cell);
+      }
+      setTurnHighlight();
+    }
+
+    function highlightWinningCells(line){
+      if(!line || !line.length) return;
+      const boardEl=document.getElementById("board");
+      if(!boardEl) return;
+      const set=new Set(line.map(String));
+      boardEl.querySelectorAll(".cell").forEach((cell)=>{
+        if(set.has(cell.dataset.i)) cell.classList.add("win");
+      });
+    }
+
+    function setTurnHighlight(){
+      const boardEl=document.getElementById("board");
+      const human=document.getElementById("mode-human");
+      const ai=document.getElementById("mode-ai");
+      if(currentTurn==="human"){
+        boardEl.style.borderColor="rgba(223,255,0,0.55)";
+        human.style.boxShadow="0 0 18px rgba(223,255,0,0.15)";
+        ai.style.boxShadow="none";
+      } else {
+        boardEl.style.borderColor="rgba(74,93,58,0.6)";
+        ai.style.boxShadow="0 0 18px rgba(74,93,58,0.15)";
+        human.style.boxShadow="none";
+      }
+    }
+
+    function clearTurnTimer(){ if(turnInterval) clearInterval(turnInterval); turnInterval=null; }
+    function formatMMSS(sec){
+      const mm=String(Math.floor(sec/60)).padStart(2,"0");
+      const ss=String(sec%60).padStart(2,"0");
+      return mm+":"+ss;
+    }
+    function startTurn(turn){
+      if(gameOver) return;
+      currentTurn=turn;
+      setTurnHighlight();
+      clearTurnTimer();
+      turnDeadlineMs=Date.now()+TURN_SECONDS*1000;
+
+      const tick=()=>{
+        const leftMs=turnDeadlineMs-Date.now();
+        const leftSec=Math.max(0, Math.ceil(leftMs/1000));
+        document.getElementById("game-timer").textContent=formatMMSS(leftSec);
+        if(leftMs<=0){
+          clearTurnTimer();
+          if(gameOver) return;
+          if(turn==="human") onAIFinalWin(true);
+          else onHumanWin(true);
+        }
+      };
+      tick();
+      turnInterval=setInterval(tick, 180);
+    }
+
+    function resetGame(){
+      board=Array(ROWS*COLS).fill(0);
+      gameOver=false;
+      currentTurn="human";
+      clearTurnTimer();
+    }
+
+    function showPanels({bonus=false, loss=false, vitezero=false, winNext=false, quote=true}){
+      document.getElementById("panel-win-bonus").classList.toggle("show", bonus);
+      document.getElementById("panel-loss").classList.toggle("show", loss);
+      document.getElementById("panel-vitezero").classList.toggle("show", vitezero);
+      document.getElementById("win-next-wrap").style.display = winNext ? "block" : "none";
+      document.getElementById("panel-quote").classList.toggle("show", quote);
+    }
+
+    function onHumanWin(fromTimeout){
+      gameOver=true;
+      clearTurnTimer();
+
+      streak += 1;
+      const bonus = streak > 0 && (streak % 5 === 0);
+      document.getElementById("result-title").textContent="HAI VINTO!";
+      document.getElementById("result-sub").textContent=`Challenge #${challenge} superata`;
+      document.getElementById("result-streak").textContent=`STREAK × ${streak}`;
+      document.getElementById("result-quote").textContent = bonus ? getRandomFrase("winStreak") : getRandomFrase("win");
+
+      highlightWinningCells(findWinningLine(board, HUMAN));
+      showPanels({bonus, loss:false, vitezero:false, winNext:!bonus, quote:true});
+      saveMeta();
+      showScreen("result");
+    }
+
+    function onAIFinalWin(fromTimeout){
+      gameOver=true;
+      clearTurnTimer();
+
+      streak = 0;
+      vite = Math.max(0, vite-1);
+      document.getElementById("result-title").textContent="HEYBOT VINCE";
+      document.getElementById("result-sub").textContent=`Vite rimaste: ${vite}`;
+      document.getElementById("loss-sub").textContent=`Vite rimaste: ${vite}`;
+      document.getElementById("result-quote").textContent = vite===0 ? getRandomFrase("lossZeroVite") : getRandomFrase("loss");
+
+      highlightWinningCells(findWinningLine(board, AI));
+      showPanels({bonus:false, loss:vite>0, vitezero:vite===0, winNext:false, quote:true});
+      if (vite === 0 && !localStorage.getItem("hp-vite-empty-at")) {
+        localStorage.setItem("hp-vite-empty-at", String(Date.now()));
+      }
+      saveMeta();
+      showScreen("result");
+      if(vite===0) startViteZeroCountdown();
+    }
+
+    function startViteZeroCountdown(){
+      const el=document.getElementById("vitezero-timer");
+      if(window._viteZeroInt) clearInterval(window._viteZeroInt);
+      const tick=()=>{
+        const emptyAt = Number(localStorage.getItem("hp-vite-empty-at") || Date.now());
+        const target = emptyAt + (10 * 60 * 1000);
+        const diff = target - Date.now();
+        if(diff<=0){
+          el.textContent="00:00";
+          vite = 5;
+          localStorage.removeItem("hp-vite-empty-at");
+          saveMeta();
+          updateHomeUI();
+          return;
+        }
+        const h=Math.floor(diff/3600000);
+        const m=Math.floor((diff%3600000)/60000);
+        const s=Math.floor((diff%60000)/1000);
+        if (h > 0) el.textContent=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+        else el.textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+      };
+      tick();
+      window._viteZeroInt=setInterval(tick, 1000);
+    }
+
+    async function startGame(){
+      aiSeed=Math.floor(Math.random()*1e9);
+      aiRng=mulberry32(aiSeed);
+
+      resetGame();
+      renderBoard();
+      showScreen("game");
+      startTurn("human");
+    }
+
+    function handleHumanMove(col){
+      if(gameOver || currentTurn!=="human") return;
+      const nb=applyMove(board,col,HUMAN);
+      if(!nb) return;
+      board=nb;
+      renderBoard();
+      if(checkWin(board,HUMAN)) return onHumanWin(false);
+      if(isDraw(board)) {
+        gameOver=true; clearTurnTimer();
+        document.getElementById("result-title").textContent="PAREGGIO";
+        document.getElementById("result-sub").textContent="Nessuno ha schiacciato per primo.";
+        document.getElementById("result-quote").textContent="— HEYBOT";
+        document.getElementById("btn-next").textContent="RIGIOCA";
+        showPanels({bonus:false,loss:false,vitezero:false,winNext:true,quote:true});
+        showScreen("result");
+        return;
+      }
+
+      clearTurnTimer();
+      startTurn("ai");
+      const deadline=turnDeadlineMs;
+
+      setTimeout(()=>{
+        if(gameOver || currentTurn!=="ai") return;
+        if(Date.now()>deadline) return; // timeout gestito dal tick
+        const aiCol=chooseAIMove();
+        if(aiCol===null || aiCol===undefined) return onHumanWin(true);
+        const nb2=applyMove(board,aiCol,AI);
+        if(!nb2) return onHumanWin(true);
+        board=nb2;
+        renderBoard();
+        if(checkWin(board,AI)) return onAIFinalWin(false);
+        if(isDraw(board)) {
+          gameOver=true; clearTurnTimer();
+          document.getElementById("result-title").textContent="PAREGGIO";
+          document.getElementById("result-sub").textContent="Nessuno ha schiacciato per primo.";
+          document.getElementById("result-quote").textContent="— HEYBOT";
+          document.getElementById("btn-next").textContent="RIGIOCA";
+          showPanels({bonus:false,loss:false,vitezero:false,winNext:true,quote:true});
+          showScreen("result");
+          return;
+        }
+        clearTurnTimer();
+        startTurn("human");
+      }, 650);
+    }
+
+    function renderRanking(){
+      const el=document.getElementById("ranking-list");
+      el.innerHTML="";
+      const cur=nickname || "YOU";
+      const rows=[
+        {name:"Marco",points:2450},
+        {name:"Giulia",points:1890},
+        {name:"Alessandro",points:1200},
+        {name:"Sofia",points:980},
+        {name:cur,points:450 + streak*10}
+      ];
+      rows.forEach((p, i)=>{
+        const current = p.name===cur;
+        const letter=(p.name||"U").trim().charAt(0).toUpperCase();
+        const row=document.createElement("div");
+        row.className="player" + (current ? " current" : "");
+        row.innerHTML=`
+          <div class="left" style="display:flex;align-items:center;gap:12px">
+            <div class="avatar">${escapeHtml(letter)}</div>
+            <div>
+              <div class="name" style="font-weight:900">${escapeHtml(p.name)}</div>
+              <div class="rank">#${i+1}</div>
+            </div>
+          </div>
+          <div class="points">${escapeHtml(String(p.points))}</div>
+        `;
+        el.appendChild(row);
+      });
+    }
+
+    /* ===== UI wiring ===== */
+    function wire(){
+      document.getElementById("btn-enter").addEventListener("click", ()=>showScreen("login"));
+
+      document.getElementById("btn-login").addEventListener("click", async ()=>{
+        const n=(document.getElementById("login-nickname").value||"").trim();
+        const e=(document.getElementById("login-email").value||"").trim();
+        if(!n) return alert("Inserisci un nickname.");
+        if(!e) return alert("Inserisci una email.");
+        if(isTempMail(e)) return alert("Email temporanea non permessa.");
+
+        nickname=n;
+        localStorage.setItem("hp-nickname", nickname);
+
+        const isFile = window.location.protocol === "file:";
+        const previewAllowed = isFile && allowDesktop;
+        if(previewAllowed){
+          isLoggedIn=true;
+          loadMeta(); updateHomeUI();
+          showScreen("home");
+          return;
+        }
+
+        const sup = await waitForSupabase();
+        if(!sup) return alert("Supabase non pronto. Ricarica la pagina.");
+
+        await sup.auth.signInWithOtp({
+          email: e,
+          options: { emailRedirectTo: window.location.origin }
+        });
+        alert("Controlla la tua email e apri il magic link.");
+      });
+
+      document.getElementById("btn-play").addEventListener("click", async ()=>{
+        if(!isLoggedIn){
+          alert("Per giocare devi essere loggato.");
+          return;
+        }
+        if(vite<=0){
+          onAIFinalWin(true);
+          return;
+        }
+        await startGame();
+      });
+
+      document.getElementById("btn-ranking").addEventListener("click", ()=>{
+        renderRanking();
+        showScreen("ranking");
+      });
+      document.getElementById("btn-info").addEventListener("click", ()=>showScreen("info"));
+
+      document.getElementById("btn-logout").addEventListener("click", async ()=>{
+        try{
+          const sup = await waitForSupabase();
+          if(sup) await sup.auth.signOut();
+        }catch(_){}
+        isLoggedIn=false;
+        showScreen("login");
+      });
+
+      document.getElementById("btn-back-home-ranking").addEventListener("click", ()=>showScreen("home"));
+      document.getElementById("btn-back-home-info").addEventListener("click", ()=>showScreen("home"));
+      document.getElementById("btn-back-home").addEventListener("click", ()=>{ loadMeta(); updateHomeUI(); showScreen("home"); });
+      document.getElementById("btn-zero-back-home").addEventListener("click", ()=>{ loadMeta(); updateHomeUI(); showScreen("home"); });
+
+      document.getElementById("btn-retry").addEventListener("click", async ()=>{
+        if(vite<=0) return;
+        await startGame();
+      });
+
+      document.getElementById("btn-next").addEventListener("click", ()=>{
+        const title=(document.getElementById("result-title").textContent||"").trim();
+        if(title !== "PAREGGIO") challenge += 1;
+        saveMeta();
+        loadMeta();
+        updateHomeUI();
+        document.getElementById("btn-next").textContent="PROSSIMA CHALLENGE";
+        showScreen("home");
+      });
+
+      document.getElementById("btn-bonus-continue").addEventListener("click", ()=>{
+        challenge += 1;
+        saveMeta();
+        loadMeta();
+        updateHomeUI();
+        showScreen("home");
+      });
+      document.getElementById("btn-bonus-vite").addEventListener("click", ()=>{
+        vite += 2;
+        streak = 0;
+        saveMeta();
+        loadMeta();
+        updateHomeUI();
+        showScreen("home");
+      });
+
+      document.getElementById("board").addEventListener("click", (ev)=>{
+        const cell=ev.target.closest(".cell");
+        if(!cell) return;
+        const col=Number(cell.dataset.col);
+        if(!Number.isFinite(col)) return;
+        handleHumanMove(col);
+      });
+    }
+
+    /* ===== Boot ===== */
+    document.addEventListener("DOMContentLoaded", async ()=>{
+      initCookieBanner();
+      wire();
+      loadMeta();
+      nickname = localStorage.getItem("hp-nickname") || "";
+      updateHomeUI();
+      renderBoard();
+      showPanels({bonus:false,loss:false,vitezero:false,winNext:false,quote:true});
+      showScreen("splash");
+      await initAuth();
+    });
 </script>
 </body>
 </html>
